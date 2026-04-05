@@ -13,8 +13,15 @@ export const textReporter: ReporterPlugin = {
     ];
 
     if (result.fileScores.length > 0) {
-      lines.push("", "Hotspots:");
+      lines.push("", "File hotspots:");
       for (const hotspot of result.fileScores.slice(0, 5)) {
+        lines.push(`- ${hotspot.path}: score=${hotspot.score.toFixed(2)} findings=${hotspot.findingCount}`);
+      }
+    }
+
+    if (result.directoryScores.length > 0) {
+      lines.push("", "Directory hotspots:");
+      for (const hotspot of result.directoryScores.slice(0, 5)) {
         lines.push(`- ${hotspot.path}: score=${hotspot.score.toFixed(2)} findings=${hotspot.findingCount}`);
       }
     }

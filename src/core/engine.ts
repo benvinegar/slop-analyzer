@@ -116,9 +116,25 @@ export async function analyzeRepository(
   const directoryProviders = registry.getFactProviders().filter((provider) => provider.scope === "directory");
   const repoProviders = registry.getFactProviders().filter((provider) => provider.scope === "repo");
 
-  const orderedFileProviders = orderFactProviders(fileProviders, ["file.record", "file.text", "file.lineCount"]);
-  const orderedDirectoryProviders = orderFactProviders(directoryProviders, ["directory.record"]);
-  const orderedRepoProviders = orderFactProviders(repoProviders, ["repo.files", "repo.directories"]);
+  const fileBaseFacts = ["file.record", "file.text", "file.lineCount"];
+  const orderedFileProviders = orderFactProviders(fileProviders, fileBaseFacts);
+  const fileDerivedFacts = orderedFileProviders.flatMap((provider) => provider.provides);
+
+  const orderedDirectoryProviders = orderFactProviders(directoryProviders, [
+    "directory.record",
+    ...fileBaseFacts,
+    ...fileDerivedFacts,
+  ]);
+  const directoryDerivedFacts = orderedDirectoryProviders.flatMap((provider) => provider.provides);
+
+  const orderedRepoProviders = orderFactProviders(repoProviders, [
+    "repo.files",
+    "repo.directories",
+    "directory.record",
+    ...fileBaseFacts,
+    ...fileDerivedFacts,
+    ...directoryDerivedFacts,
+  ]);
 
   await runProviders(
     orderedFileProviders,
@@ -133,12 +149,10 @@ export async function analyzeRepository(
   await runProviders(orderedRepoProviders, [{ scope: "repo", runtime }], store);
 
   const availableFacts = [
-    "file.record",
-    "file.text",
-    "file.lineCount",
-    ...orderedFileProviders.flatMap((provider) => provider.provides),
+    ...fileBaseFacts,
+    ...fileDerivedFacts,
     "directory.record",
-    ...orderedDirectoryProviders.flatMap((provider) => provider.provides),
+    ...directoryDerivedFacts,
     "repo.files",
     "repo.directories",
     ...orderedRepoProviders.flatMap((provider) => provider.provides),
