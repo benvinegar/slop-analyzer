@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import path from "node:path";
 import { DEFAULT_CONFIG, loadConfig } from "../src/config";
 import { formatHelp, run } from "../src/cli";
 
@@ -14,7 +15,8 @@ describe("project scaffold", () => {
   });
 
   test("scan command exits successfully", async () => {
-    const exitCode = await run(["scan", "."]);
+    const fixtureRoot = path.join(process.cwd(), "tests", "fixtures", "repos", "clean");
+    const exitCode = await run(["scan", fixtureRoot]);
     expect(exitCode).toBe(0);
   });
 });

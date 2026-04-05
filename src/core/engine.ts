@@ -54,12 +54,19 @@ async function runRules(rules: RulePlugin[], contexts: ProviderContext[]): Promi
 
   for (const context of contexts) {
     for (const rule of rules) {
-      if (!rule.supports(context)) {
+      const ruleConfig = context.runtime.config.rules[rule.id];
+      if (ruleConfig?.enabled === false || !rule.supports(context)) {
         continue;
       }
 
+      const weight = ruleConfig?.weight ?? 1;
       const nextFindings = await rule.evaluate(context);
-      findings.push(...nextFindings);
+      findings.push(
+        ...nextFindings.map((finding) => ({
+          ...finding,
+          score: finding.score * weight,
+        })),
+      );
     }
   }
 
