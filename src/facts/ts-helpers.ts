@@ -19,8 +19,29 @@ export function getScriptKind(filePath: string): ts.ScriptKind {
   }
 }
 
+function getLanguageVariant(filePath: string): ts.LanguageVariant {
+  return filePath.endsWith(".tsx") || filePath.endsWith(".jsx")
+    ? ts.LanguageVariant.JSX
+    : ts.LanguageVariant.Standard;
+}
+
 export function getLineNumber(sourceFile: ts.SourceFile, position: number): number {
   return sourceFile.getLineAndCharacterOfPosition(position).line + 1;
+}
+
+export function countLogicalLines(text: string, filePath: string): number {
+  const sourceFile = ts.createSourceFile(filePath, text, ts.ScriptTarget.Latest, true, getScriptKind(filePath));
+  const scanner = ts.createScanner(ts.ScriptTarget.Latest, true, getLanguageVariant(filePath), text);
+  const logicalLines = new Set<number>();
+
+  let token = scanner.scan();
+  while (token !== ts.SyntaxKind.EndOfFileToken) {
+    const tokenLine = sourceFile.getLineAndCharacterOfPosition(scanner.getTokenPos()).line + 1;
+    logicalLines.add(tokenLine);
+    token = scanner.scan();
+  }
+
+  return logicalLines.size;
 }
 
 export function walk(node: ts.Node, visit: (node: ts.Node) => void): void {

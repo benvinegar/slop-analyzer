@@ -4,6 +4,7 @@ import { FactStore } from "./fact-store";
 import { orderFactProviders, validateRuleRequirements } from "./scheduler";
 import type {
   AnalysisResult,
+  AnalysisSummary,
   AnalyzerRuntime,
   DirectoryRecord,
   FactProvider,
@@ -13,6 +14,8 @@ import type {
   RulePlugin,
 } from "./types";
 import { Registry } from "./registry";
+import { countLogicalLines } from "../facts/ts-helpers";
+import type { FunctionSummary } from "../facts/types";
 
 function createRuntime(
   rootDir: string,
@@ -95,6 +98,39 @@ function buildDirectoryScores(directories: DirectoryRecord[], findings: Finding[
     })
     .filter((score) => score.findingCount > 0)
     .sort((left, right) => right.score - left.score || left.path.localeCompare(right.path));
+}
+
+function divideOrNull(numerator: number, denominator: number): number | null {
+  return denominator > 0 ? numerator / denominator : null;
+}
+
+function buildSummary(files: FileRecord[], directories: DirectoryRecord[], findings: Finding[], store: FactStore): AnalysisSummary {
+  const repoScore = findings.reduce((total, finding) => total + finding.score, 0);
+  const physicalLineCount = files.reduce((total, file) => total + file.lineCount, 0);
+  const logicalLineCount = files.reduce((total, file) => total + countLogicalLines(file.text, file.path), 0);
+  const functionCount = files.reduce(
+    (total, file) => total + (store.getFileFact<FunctionSummary[]>(file.path, "file.functionSummaries")?.length ?? 0),
+    0,
+  );
+  const kloc = logicalLineCount / 1000;
+
+  return {
+    fileCount: files.length,
+    directoryCount: directories.length,
+    findingCount: findings.length,
+    repoScore,
+    physicalLineCount,
+    logicalLineCount,
+    functionCount,
+    normalized: {
+      scorePerFile: divideOrNull(repoScore, files.length),
+      scorePerKloc: divideOrNull(repoScore, kloc),
+      scorePerFunction: divideOrNull(repoScore, functionCount),
+      findingsPerFile: divideOrNull(findings.length, files.length),
+      findingsPerKloc: divideOrNull(findings.length, kloc),
+      findingsPerFunction: divideOrNull(findings.length, functionCount),
+    },
+  };
 }
 
 export async function analyzeRepository(
@@ -186,15 +222,17 @@ export async function analyzeRepository(
   const findings = [...fileFindings, ...directoryFindings, ...repoFindings];
   const fileScores = buildFileScores(discovery.files, findings);
   const directoryScores = buildDirectoryScores(discovery.directories, findings);
+  const summary = buildSummary(discovery.files, discovery.directories, findings, store);
 
   return {
     rootDir,
     config,
+    summary,
     files: discovery.files,
     directories: discovery.directories,
     findings,
     fileScores,
     directoryScores,
-    repoScore: findings.reduce((total, finding) => total + finding.score, 0),
+    repoScore: summary.repoScore,
   };
 }

@@ -122,8 +122,15 @@ This keeps the codebase extensible without turning the scanner into one giant li
 
 The CLI currently reports:
 
-- summary counts
-- repo score
+- raw counts
+- physical LOC, logical LOC, and function counts
+- normalized metrics:
+  - score / file
+  - score / KLOC (logical)
+  - score / function
+  - findings / file
+  - findings / KLOC (logical)
+  - findings / function
 - file hotspots
 - directory hotspots
 - detailed findings in JSON mode

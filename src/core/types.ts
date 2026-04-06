@@ -46,9 +46,30 @@ export interface DirectoryScore {
   findingCount: number;
 }
 
+export interface NormalizedMetrics {
+  scorePerFile: number | null;
+  scorePerKloc: number | null;
+  scorePerFunction: number | null;
+  findingsPerFile: number | null;
+  findingsPerKloc: number | null;
+  findingsPerFunction: number | null;
+}
+
+export interface AnalysisSummary {
+  fileCount: number;
+  directoryCount: number;
+  findingCount: number;
+  repoScore: number;
+  physicalLineCount: number;
+  logicalLineCount: number;
+  functionCount: number;
+  normalized: NormalizedMetrics;
+}
+
 export interface AnalysisResult {
   rootDir: string;
   config: AnalyzerConfig;
+  summary: AnalysisSummary;
   files: FileRecord[];
   directories: DirectoryRecord[];
   findings: Finding[];

@@ -7,12 +7,7 @@ export const jsonReporter: ReporterPlugin = {
       {
         rootDir: result.rootDir,
         config: result.config,
-        summary: {
-          fileCount: result.files.length,
-          directoryCount: result.directories.length,
-          findingCount: result.findings.length,
-          repoScore: result.repoScore,
-        },
+        summary: result.summary,
         files: result.files.map((file) => ({
           path: file.path,
           extension: file.extension,

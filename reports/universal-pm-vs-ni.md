@@ -25,19 +25,55 @@ bun run src/cli.ts scan /tmp/aicand-ZTXEM9 --json
 bun run src/cli.ts scan /tmp/ni-JjVTWC --json
 ```
 
-## Headline result
-
-The analyzer currently separates these repos reasonably well on a normalized basis.
+## Summary
 
 | Metric | universal-pm | ni |
 |---|---:|---:|
 | Source files scanned | 18 | 87 |
 | Findings | 23 | 14 |
-| Repo score | 88.70 | 62.87 |
-| Score per file | **4.93** | **0.72** |
-| Findings per file | **1.28** | **0.16** |
+| Repo score (raw) | 88.70 | 62.87 |
+| Physical LOC | 4845 | 3569 |
+| Logical LOC | 1295 | 2138 |
+| Function count | 149 | 99 |
 
-Even though `ni` is much larger, `universal-pm` scores about **6.8x higher per file** and produces about **8x more findings per file**.
+## Normalized metrics
+
+| Metric | universal-pm | ni | Relative result |
+|---|---:|---:|---|
+| Score / file | **4.93** | **0.72** | universal-pm ~6.8x higher |
+| Findings / file | **1.28** | **0.16** | universal-pm ~8.0x higher |
+| Score / KLOC | **68.49** | **29.41** | universal-pm ~2.3x higher |
+| Findings / KLOC | **17.76** | **6.55** | universal-pm ~2.7x higher |
+| Score / function | 0.60 | 0.64 | roughly similar |
+| Findings / function | 0.15 | 0.14 | roughly similar |
+
+## Interpretation
+
+### Strong signal
+
+The most useful normalized metrics in this comparison are:
+
+- **score / file**
+- **findings / file**
+- **score / KLOC**
+- **findings / KLOC**
+
+Across those, `universal-pm` is consistently much noisier than `ni`.
+
+### Weak signal
+
+Per-function normalization is less discriminative here:
+
+- `score / function` is roughly flat
+- `findings / function` is also close
+
+That suggests many current findings are driven by:
+- file-level organization,
+- wrapper density,
+- repeated defensive patterns,
+- and repo structure,
+
+more than by raw function count alone.
 
 ## Rule mix
 
@@ -61,86 +97,68 @@ Even though `ni` is much larger, `universal-pm` scores about **6.8x higher per f
 | `structure.directory-fanout-hotspot` | 1 |
 | `tests.duplicate-mock-setup` | 0 |
 
-## Interpretation
+## Hotspots
 
 ### universal-pm
-
-The AI repo is dominated by the rule families we currently consider most suspicious:
-
-- `needless-try-catch`
-- `async-noise`
-- `pass-through-wrappers`
-
-Top hotspots:
+Top files:
 - `src/index.ts` — 14.0
 - `src/commands/index.ts` — 12.0
 - `src/commands/utilities.ts` — 11.4
 - `src/commands/update.ts` — 10.0
 - `src/services/manager.ts` — 10.0
 
-This points to a pattern of:
-- lots of defensive shell/process wrappers,
-- many shallow async helpers,
-- repetitive command plumbing,
-- pass-through abstractions with little additional logic.
+This repo is dominated by:
+- defensive command wrappers,
+- repeated async helpers,
+- monolithic command plumbing,
+- pass-through abstractions.
 
 ### ni
-
-The manual repo does **not** light up on the same suspicious families.
-
-Its score is mostly structural:
-- `over-fragmentation`
-- a little `async-noise`
-- one `barrel-density` hit
-
-Top hotspots:
+Top files:
 - `src/catalog/pnpm.ts` — 3.0
 - `src/index.ts` — 3.0
 - `src/commands/ni.ts` — 1.5
 - `src/commands/nr.ts` — 1.5
 - `src/commands/nun.ts` — 1.5
 
-That suggests the current analyzer sees `ni` mostly as a modular CLI with many small files and tests, not as a repo dominated by AI-ish defensive clutter.
+This repo is mostly being hit for:
+- modular tiny-file structure,
+- some async patterns,
+- one barrel file,
 
-## About the new test-duplication heuristic
+not for the heavier defensive/wrapper clutter seen in `universal-pm`.
+
+## About the test-duplication rule
 
 A new rule was added in this pass:
 
 - `tests.duplicate-mock-setup`
 
-It looks for repeated mock/setup shapes across multiple test files.
-
-Important outcome for this comparison:
-
+In this comparison:
 - `universal-pm`: **0** hits
 - `ni`: **0** hits
 
-This is a useful negative result.
+This is still informative because it means the rule did **not** spuriously penalize `ni` for having a large test suite.
 
-It means the rule, in its current form, did **not** spuriously penalize `ni` for its many test files, and it also did not change the `universal-pm` result because that repo has little test surface to analyze.
+## Takeaway
 
-## Current takeaway
+The analyzer currently distinguishes these repos in a direction that makes sense, especially on the normalized metrics that seem most meaningful right now:
 
-This comparison is encouraging for the analyzer.
+- **per file**
+- **per KLOC**
 
-The current engine differentiates the repos in a direction that makes sense:
-
-- the explicitly AI-generated repo looks much noisier per file,
-- the manual repo scores far lower per file,
-- and the rule mix is qualitatively different.
+Those metrics suggest the explicitly AI-generated repo is materially noisier than the manual one.
 
 ## Caveats
 
-This is still an early heuristic engine, so a few caveats matter:
+1. `repoScore` is still a raw aggregate, not a calibrated quality score.
+2. `ni` still gets structural penalties for intentionally modular layouts.
+3. Per-function normalization is currently not very useful for this benchmark pair.
+4. A better benchmark set should include several AI and manual repos in the same category.
 
-1. `repoScore` is still a raw aggregate, not a calibrated 0–100 quality score.
-2. `ni` still gets structural penalties from tiny-file/test layouts that may be legitimate.
-3. `universal-pm` is a small repo, so concentrated noise inflates the per-file comparison.
-4. A stronger benchmark set should eventually include multiple AI and manual repos per category.
-
-## Recommended next calibration steps
+## Recommended next steps
 
 1. Add duplicate function / near-clone detection.
-2. Refine `over-fragmentation` so tiny test matrices are less likely to be over-penalized when they are intentionally data-driven.
-3. Add a distinction between boundary CLI wrappers and leaf business-logic wrappers.
-4. Build a small benchmark suite of known-AI and known-manual repos with saved scan snapshots.
+2. Refine `over-fragmentation` so intentionally data-driven test matrices are downweighted.
+3. Differentiate boundary CLI wrappers from leaf business-logic wrappers more sharply.
+4. Build a small multi-repo benchmark suite with saved snapshots.
