@@ -2,6 +2,9 @@ import type { RulePlugin } from "../../core/types";
 import type { CommentSummary, FunctionSummary } from "../../facts/types";
 import { isBoundaryWrapperTarget } from "../helpers";
 
+// Nearby wording like "alias" or "backward compatibility" usually means the
+// wrapper exists to preserve an API name rather than because the author lazily
+// introduced another layer.
 const ALIAS_COMMENT_PATTERNS = [
   /\balias\b/i,
   /backward\s+compat/i,
@@ -11,6 +14,11 @@ const ALIAS_COMMENT_PATTERNS = [
   /keep\s+the\s+old\s+name/i,
 ];
 
+/**
+ * Returns true when the wrapper is immediately preceded by a compatibility
+ * comment. We only look one or two lines upward to keep the association tight
+ * and avoid broad file-level exemptions.
+ */
 function hasNearbyAliasComment(summary: FunctionSummary, comments: CommentSummary[]): boolean {
   return comments.some((comment) => {
     const lineDelta = summary.line - comment.line;
@@ -18,6 +26,14 @@ function hasNearbyAliasComment(summary: FunctionSummary, comments: CommentSummar
   });
 }
 
+/**
+ * Flags trivial pass-through wrappers that mostly just rename or forward a call.
+ *
+ * The main exemptions are:
+ * - compatibility/alias wrappers documented by nearby comments
+ * - boundary/framework wrappers where keeping an abstraction layer is often
+ *   intentional even if the body is mechanically thin
+ */
 export const passThroughWrappersRule: RulePlugin = {
   id: "structure.pass-through-wrappers",
   family: "structure",
@@ -54,6 +70,8 @@ export const passThroughWrappersRule: RulePlugin = {
         evidence: wrappers.map(
           (summary) => `${summary.name} at line ${summary.line}${summary.passThroughTarget ? ` -> ${summary.passThroughTarget}` : ""}`,
         ),
+        // Each wrapper matters, but cap the file contribution so one adapter file
+        // cannot swamp the repo score by itself.
         score: Math.min(5, wrappers.length * 2),
         locations: wrappers.map((summary) => ({ path: context.file!.path, line: summary.line })),
       },

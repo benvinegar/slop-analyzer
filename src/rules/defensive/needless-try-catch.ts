@@ -1,16 +1,26 @@
 import type { RulePlugin } from "../../core/types";
 import type { TryCatchSummary } from "../../facts/types";
 
+/**
+ * Flags small defensive try/catch blocks whose catch clauses mainly swallow,
+ * log, or flatten errors instead of adding meaningful handling.
+ *
+ * This rule is intentionally boundary-aware: filesystem/network/process/browser
+ * edges still get flagged, but with a lower score because translation/logging is
+ * more defensible there than in ordinary business logic.
+ */
 function isNeedless(summary: TryCatchSummary): boolean {
   return (
-    summary.hasCatchClause &&
-    summary.tryStatementCount <= 2 &&
-    (
-      summary.catchLogsOnly ||
-      summary.catchReturnsDefault ||
-      summary.catchIsEmpty ||
-      summary.catchThrowsGeneric ||
-      (summary.catchHasLogging && summary.catchHasDefaultReturn)
+    summary.hasCatchClause
+    // Small try blocks are the strongest smell here: a tiny region with a weak
+    // catch often means the wrapper was generated out of habit.
+    && summary.tryStatementCount <= 2
+    && (
+      summary.catchLogsOnly
+      || summary.catchReturnsDefault
+      || summary.catchIsEmpty
+      || summary.catchThrowsGeneric
+      || (summary.catchHasLogging && summary.catchHasDefaultReturn)
     )
   );
 }
@@ -22,11 +32,15 @@ function scoreTryCatch(summary: TryCatchSummary): number {
     score += 0.5;
   }
 
+  // Re-throwing a generic error is still noisy, but it is slightly less bad
+  // than silently swallowing or flattening the failure into a default.
   if (summary.catchThrowsGeneric) {
     score -= 0.5;
   }
 
   if (summary.boundaryCategories.length > 0) {
+    // Boundary code often logs/translates errors for operational reasons, so we
+    // downweight instead of fully exempting it.
     score *= 0.4;
     if (summary.catchIsEmpty) {
       score += 0.5;

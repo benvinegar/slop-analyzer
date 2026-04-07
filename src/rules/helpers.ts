@@ -1,6 +1,12 @@
 import path from "node:path";
 
+// These segments are intentionally conservative. The goal is to recognize common
+// asset buckets like icon packs without teaching the analyzer that arbitrary
+// directories full of tiny files are always harmless.
 const ASSET_LIKE_DIRECTORY_SEGMENTS = new Set(["icon", "icons", "svg", "svgs", "asset", "assets"]);
+
+// Thin wrappers around these targets are often boundary/framework adapters, so
+// rules such as async-noise and pass-through-wrappers treat them more leniently.
 const BOUNDARY_WRAPPER_TARGET_PREFIXES = [
   "prisma.",
   "redis.",
@@ -47,6 +53,10 @@ export function median(values: number[]): number {
   return (left + right) / 2;
 }
 
+/**
+ * Treat icon/svg/asset folders specially so structural rules do not confuse a
+ * generated asset pack with a suspiciously fragmented code directory.
+ */
 export function isAssetLikeDirectoryPath(directoryPath: string): boolean {
   return directoryPath
     .split("/")
@@ -58,6 +68,10 @@ export function parentDirectoryPath(directoryPath: string): string {
   return path.posix.dirname(directoryPath);
 }
 
+/**
+ * Returns true for wrapper targets that usually sit at a system boundary, where
+ * thin adapters are often intentional and not just slop.
+ */
 export function isBoundaryWrapperTarget(target: string | null): boolean {
   if (!target) {
     return false;
