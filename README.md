@@ -91,12 +91,12 @@ The repo ships with a **pinned, recreatable benchmark set** comparing explicit-A
 
 | Metric | Explicit-AI median | Mature OSS median | Ratio |
 |---|---:|---:|---:|
-| Score / file | **1.20** | **0.14** | **8.64x** |
-| Score / KLOC | **10.76** | **3.43** | **3.13x** |
-| Score / function | **0.36** | **0.07** | **5.17x** |
-| Findings / file | **0.40** | **0.04** | **9.97x** |
-| Findings / KLOC | **4.69** | **0.99** | **4.73x** |
-| Findings / function | **0.10** | **0.02** | **4.40x** |
+| Score / file | **1.20** | **0.18** | **6.51x** |
+| Score / KLOC | **10.76** | **4.04** | **2.66x** |
+| Score / function | **0.36** | **0.08** | **4.42x** |
+| Findings / file | **0.40** | **0.06** | **6.76x** |
+| Findings / KLOC | **4.69** | **1.06** | **4.42x** |
+| Findings / function | **0.10** | **0.02** | **4.17x** |
 
 ### Pinned benchmark snapshot
 
@@ -113,6 +113,8 @@ The repo ships with a **pinned, recreatable benchmark set** comparing explicit-A
 | `execa` | mature-oss | `f3a2e84` | 0.16 | 4.48 | 0.04 | 1.08 |
 | `hyper` | mature-oss | `2a7bb18` | 0.60 | 1.05 | 0.15 | 0.26 |
 | `umami` | mature-oss | `0a83864` | 0.12 | 3.26 | 0.04 | 1.05 |
+| `vite` | mature-oss | `bdc53ab` | 0.26 | 7.98 | 0.08 | 2.36 |
+| `astro` | mature-oss | `2c9bf5e` | 0.24 | 5.04 | 0.08 | 1.71 |
 
 Full benchmark assets:
 - manifest: [`benchmarks/sets/known-ai-vs-solid-oss.json`](benchmarks/sets/known-ai-vs-solid-oss.json)
@@ -151,7 +153,8 @@ That keeps the analyzer deterministic and extensible without turning it into one
 ## Docs
 
 - benchmark guide: [`benchmarks/README.md`](benchmarks/README.md)
-- benchmark report: [`reports/known-ai-vs-solid-oss-benchmark.md`](reports/known-ai-vs-solid-oss-benchmark.md)
+- pinned benchmark report: [`reports/known-ai-vs-solid-oss-benchmark.md`](reports/known-ai-vs-solid-oss-benchmark.md)
+- exploratory overfitting check: [`reports/exploratory-vite-astro-openclaw-beads.md`](reports/exploratory-vite-astro-openclaw-beads.md)
 - project spec: [`PROJECT_SPEC.md`](PROJECT_SPEC.md)
 
 ## Contributing

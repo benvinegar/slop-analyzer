@@ -42,17 +42,19 @@ The pinned refs below are the exact commits used for the saved snapshot.
 | `execa` | `f3a2e84` | 10.3y | 7481 | 581 | 20432 | 1008 | 0.16 | 4.48 | 0.09 | 0.04 | 1.08 | 0.02 |
 | `hyper` | `2a7bb18` | 9.8y | 44687 | 115 | 65160 | 5356 | 0.60 | 1.05 | 0.01 | 0.15 | 0.26 | 0.00 |
 | `umami` | `0a83864` | 5.7y | 36012 | 674 | 24859 | 1209 | 0.12 | 3.26 | 0.07 | 0.04 | 1.05 | 0.02 |
+| `vite` | `bdc53ab` | 6.0y | 79637 | 1433 | 46593 | 2300 | 0.26 | 7.98 | 0.16 | 0.08 | 2.36 | 0.05 |
+| `astro` | `2c9bf5e` | 5.1y | 58212 | 2812 | 131236 | 4359 | 0.24 | 5.04 | 0.15 | 0.08 | 1.71 | 0.05 |
 
 ## Cohort medians
 
 | Metric | AI median | Solid median | Ratio |
 |---|---:|---:|---:|
-| Score / file | **1.20** | **0.14** | **8.64x** |
-| Score / KLOC | **10.76** | **3.43** | **3.13x** |
-| Score / function | **0.36** | **0.07** | **5.17x** |
-| Findings / file | **0.40** | **0.04** | **9.97x** |
-| Findings / KLOC | **4.69** | **0.99** | **4.73x** |
-| Findings / function | **0.10** | **0.02** | **4.40x** |
+| Score / file | **1.20** | **0.18** | **6.51x** |
+| Score / KLOC | **10.76** | **4.04** | **2.66x** |
+| Score / function | **0.36** | **0.08** | **4.42x** |
+| Findings / file | **0.40** | **0.06** | **6.76x** |
+| Findings / KLOC | **4.69** | **1.06** | **4.42x** |
+| Findings / function | **0.10** | **0.02** | **4.17x** |
 
 ## Spot-check pairings
 
@@ -74,12 +76,12 @@ The pinned refs below are the exact commits used for the saved snapshot.
 - `defensive.async-noise` — 3 (2.8%)
 
 ### Mature OSS cohort
-- `defensive.needless-try-catch` — 33 (45.8%)
-- `structure.directory-fanout-hotspot` — 16 (22.2%)
-- `structure.pass-through-wrappers` — 11 (15.3%)
-- `structure.barrel-density` — 7 (9.7%)
-- `structure.over-fragmentation` — 3 (4.2%)
-- `defensive.async-noise` — 2 (2.8%)
+- `defensive.needless-try-catch` — 148 (36.5%)
+- `structure.pass-through-wrappers` — 93 (22.9%)
+- `structure.directory-fanout-hotspot` — 68 (16.7%)
+- `structure.barrel-density` — 47 (11.6%)
+- `defensive.async-noise` — 32 (7.9%)
+- `structure.over-fragmentation` — 12 (3.0%)
 
 ## Notes
 

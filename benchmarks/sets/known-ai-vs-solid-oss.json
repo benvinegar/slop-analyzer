@@ -129,6 +129,28 @@
       "stars": 36012,
       "provenance": "Mature privacy-focused analytics platform with a large TypeScript codebase.",
       "notes": "Good counterweight for explicit-AI full-stack app comparisons."
+    },
+    {
+      "id": "vite",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite.git",
+      "cohort": "mature-oss",
+      "ref": "bdc53ab1e67f7e2e000112eeed9c85413ddb0e9e",
+      "createdAt": "2020-04-21T05:03:57Z",
+      "stars": 79637,
+      "provenance": "Mature frontend tooling project with a large TypeScript codebase.",
+      "notes": "Added as a stress-test baseline to check that the analyzer does not overfit against only smaller mature repos."
+    },
+    {
+      "id": "astro",
+      "repo": "withastro/astro",
+      "url": "https://github.com/withastro/astro.git",
+      "cohort": "mature-oss",
+      "ref": "2c9bf5e278792615dfd48de42f459cc4ad8e0b29",
+      "createdAt": "2021-03-15T17:19:47Z",
+      "stars": 58212,
+      "provenance": "Mature web framework with a very large TypeScript/JavaScript monorepo.",
+      "notes": "Added as a stress-test baseline for a large, actively maintained modern framework codebase."
     }
   ],
   "pairings": [

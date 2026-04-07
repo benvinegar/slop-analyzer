@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "benchmarkSetId": "known-ai-vs-solid-oss",
   "benchmarkSetName": "Known AI repos vs older solid OSS repos",
-  "generatedAt": "2026-04-07T02:44:49.882Z",
+  "generatedAt": "2026-04-07T02:52:21.277Z",
   "analyzerVersion": "0.1.0",
   "configMode": "default",
   "repos": [
@@ -669,6 +669,177 @@
           "findingCount": 1
         }
       ]
+    },
+    {
+      "id": "vite",
+      "repo": "vitejs/vite",
+      "cohort": "mature-oss",
+      "ref": "bdc53ab1e67f7e2e000112eeed9c85413ddb0e9e",
+      "summary": {
+        "fileCount": 1433,
+        "directoryCount": 619,
+        "findingCount": 110,
+        "repoScore": 371.7909370467554,
+        "physicalLineCount": 95801,
+        "logicalLineCount": 46593,
+        "functionCount": 2300,
+        "normalized": {
+          "scorePerFile": 0.25944936290771486,
+          "scorePerKloc": 7.979544932645577,
+          "scorePerFunction": 0.1616482334985893,
+          "findingsPerFile": 0.07676203768318214,
+          "findingsPerKloc": 2.3608696585323976,
+          "findingsPerFunction": 0.04782608695652174
+        }
+      },
+      "ruleCounts": {
+        "defensive.needless-try-catch": 29,
+        "structure.pass-through-wrappers": 27,
+        "structure.directory-fanout-hotspot": 20,
+        "structure.barrel-density": 11,
+        "defensive.async-noise": 9,
+        "structure.over-fragmentation": 8,
+        "tests.duplicate-mock-setup": 6
+      },
+      "topFiles": [
+        {
+          "path": "packages/vite/src/node/server/pluginContainer.ts",
+          "score": 12.55,
+          "findingCount": 3
+        },
+        {
+          "path": "packages/vite/src/node/config.ts",
+          "score": 8,
+          "findingCount": 2
+        },
+        {
+          "path": "packages/vite/src/node/plugins/worker.ts",
+          "score": 8,
+          "findingCount": 2
+        },
+        {
+          "path": "packages/vite/src/node/ssr/__tests__/ssrLoadModule.spec.ts",
+          "score": 8,
+          "findingCount": 2
+        },
+        {
+          "path": "packages/vite/src/node/utils.ts",
+          "score": 8,
+          "findingCount": 1
+        }
+      ],
+      "topDirectories": [
+        {
+          "path": "playground/worker",
+          "score": 12.181818181818182,
+          "findingCount": 2
+        },
+        {
+          "path": "playground/js-sourcemap",
+          "score": 11.480392156862745,
+          "findingCount": 2
+        },
+        {
+          "path": "playground/legacy",
+          "score": 11.166666666666666,
+          "findingCount": 2
+        },
+        {
+          "path": "playground/lib/src",
+          "score": 10.5,
+          "findingCount": 2
+        },
+        {
+          "path": "playground/html/inline",
+          "score": 10,
+          "findingCount": 2
+        }
+      ]
+    },
+    {
+      "id": "astro",
+      "repo": "withastro/astro",
+      "cohort": "mature-oss",
+      "ref": "2c9bf5e278792615dfd48de42f459cc4ad8e0b29",
+      "summary": {
+        "fileCount": 2812,
+        "directoryCount": 1155,
+        "findingCount": 224,
+        "repoScore": 661.9540043290039,
+        "physicalLineCount": 226574,
+        "logicalLineCount": 131236,
+        "functionCount": 4359,
+        "normalized": {
+          "scorePerFile": 0.23540327323222043,
+          "scorePerKloc": 5.04399710696001,
+          "scorePerFunction": 0.1518591429981656,
+          "findingsPerFile": 0.07965860597439545,
+          "findingsPerKloc": 1.7068487305312567,
+          "findingsPerFunction": 0.05138793301215875
+        }
+      },
+      "ruleCounts": {
+        "defensive.needless-try-catch": 86,
+        "structure.pass-through-wrappers": 55,
+        "structure.directory-fanout-hotspot": 32,
+        "structure.barrel-density": 29,
+        "defensive.async-noise": 21,
+        "structure.over-fragmentation": 1
+      },
+      "topFiles": [
+        {
+          "path": "packages/astro/src/core/render-context.ts",
+          "score": 10.5,
+          "findingCount": 3
+        },
+        {
+          "path": "packages/astro/src/core/session/runtime.ts",
+          "score": 10.5,
+          "findingCount": 2
+        },
+        {
+          "path": "packages/astro/src/assets/fonts/infra/unstorage-fs-storage.ts",
+          "score": 9,
+          "findingCount": 2
+        },
+        {
+          "path": "packages/astro/src/assets/fonts/providers/index.ts",
+          "score": 9,
+          "findingCount": 2
+        },
+        {
+          "path": "packages/astro/src/core/dev/dev.ts",
+          "score": 8.5,
+          "findingCount": 2
+        }
+      ],
+      "topDirectories": [
+        {
+          "path": "packages/astro/src/runtime/client",
+          "score": 6.5,
+          "findingCount": 1
+        },
+        {
+          "path": "packages/astro/src/content",
+          "score": 4.666666666666666,
+          "findingCount": 1
+        },
+        {
+          "path": "packages/astro/src/vite-plugin-astro-server",
+          "score": 4.333333333333334,
+          "findingCount": 1
+        },
+        {
+          "path": "packages/astro/src/cli/info/infra",
+          "score": 4.166666666666666,
+          "findingCount": 1
+        },
+        {
+          "path": "packages/markdown/remark/src",
+          "score": 4.142857142857142,
+          "findingCount": 1
+        }
+      ]
     }
   ],
   "cohorts": {
@@ -684,14 +855,14 @@
       }
     },
     "mature-oss": {
-      "repoCount": 6,
+      "repoCount": 8,
       "medians": {
-        "scorePerFile": 0.13891054848636503,
-        "scorePerKloc": 3.433810264327985,
-        "scorePerFunction": 0.06975959268585996,
-        "findingsPerFile": 0.040121167161226504,
-        "findingsPerKloc": 0.9906762823333892,
-        "findingsPerFunction": 0.021665386584741424
+        "scorePerFile": 0.184411097640475,
+        "scorePerKloc": 4.042352483722697,
+        "scorePerFunction": 0.08161876664358633,
+        "findingsPerFile": 0.059214352174924406,
+        "findingsPerKloc": 1.0613206172712295,
+        "findingsPerFunction": 0.022817460317460316
       }
     }
   },
