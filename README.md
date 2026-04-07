@@ -100,23 +100,23 @@ The repo ships with a **pinned, recreatable benchmark set** comparing known AI-g
 
 ### Pinned benchmark snapshot
 
-| Repo | Cohort | Ref | Score/file | Score/KLOC | Findings/file | Findings/KLOC |
+| Repository | Cohort | Ref | Score/file | Score/KLOC | Findings/file | Findings/KLOC |
 |---|---|---|---:|---:|---:|---:|
-| `universal-pm` | ai | `2d90bde` | 3.43 | 47.64 | 0.83 | 11.58 |
-| `voice-notifications` | ai | `8a984b8` | 1.20 | 38.46 | 0.40 | 12.82 |
-| `openusage` | ai | `857f537` | 1.27 | 7.95 | 0.30 | 1.89 |
-| `devworkbench` | ai | `ea50862` | 1.00 | 10.76 | 0.44 | 4.69 |
-| `fulling` | ai | `d95060f` | 0.52 | 9.41 | 0.16 | 2.80 |
-| `openclaw` | ai | `44cf747` | 1.01 | 10.31 | 0.30 | 3.02 |
-| `emdash` | ai | `dbaf8c6` | 0.59 | 5.22 | 0.18 | 1.56 |
-| `ni` | mature-oss | `6d96905` | 0.11 | 4.68 | 0.02 | 0.94 |
-| `node-notifier` | mature-oss | `b36c237` | 0.08 | 0.90 | 0.04 | 0.47 |
-| `tsup` | mature-oss | `b906f86` | 0.21 | 3.61 | 0.08 | 1.42 |
-| `execa` | mature-oss | `f3a2e84` | 0.16 | 4.48 | 0.04 | 1.08 |
-| `hyper` | mature-oss | `2a7bb18` | 0.60 | 1.05 | 0.15 | 0.26 |
-| `umami` | mature-oss | `0a83864` | 0.12 | 3.26 | 0.04 | 1.05 |
-| `vite` | mature-oss | `bdc53ab` | 0.26 | 7.98 | 0.08 | 2.36 |
-| `astro` | mature-oss | `2c9bf5e` | 0.24 | 5.04 | 0.08 | 1.71 |
+| [`golusprasad12-arch/universal-pm`](https://github.com/golusprasad12-arch/universal-pm) | ai | `2d90bde` | 3.43 | 47.64 | 0.83 | 11.58 |
+| [`ZeldOcarina/claude-code-voice-notifications`](https://github.com/ZeldOcarina/claude-code-voice-notifications) | ai | `8a984b8` | 1.20 | 38.46 | 0.40 | 12.82 |
+| [`robinebers/openusage`](https://github.com/robinebers/openusage) | ai | `857f537` | 1.27 | 7.95 | 0.30 | 1.89 |
+| [`jiayun/DevWorkbench`](https://github.com/jiayun/DevWorkbench) | ai | `ea50862` | 1.00 | 10.76 | 0.44 | 4.69 |
+| [`FullAgent/fulling`](https://github.com/FullAgent/fulling) | ai | `d95060f` | 0.52 | 9.41 | 0.16 | 2.80 |
+| [`openclaw/openclaw`](https://github.com/openclaw/openclaw) | ai | `44cf747` | 1.01 | 10.31 | 0.30 | 3.02 |
+| [`emdash-cms/emdash`](https://github.com/emdash-cms/emdash) | ai | `dbaf8c6` | 0.59 | 5.22 | 0.18 | 1.56 |
+| [`antfu-collective/ni`](https://github.com/antfu-collective/ni) | mature-oss | `6d96905` | 0.11 | 4.68 | 0.02 | 0.94 |
+| [`mikaelbr/node-notifier`](https://github.com/mikaelbr/node-notifier) | mature-oss | `b36c237` | 0.08 | 0.90 | 0.04 | 0.47 |
+| [`egoist/tsup`](https://github.com/egoist/tsup) | mature-oss | `b906f86` | 0.21 | 3.61 | 0.08 | 1.42 |
+| [`sindresorhus/execa`](https://github.com/sindresorhus/execa) | mature-oss | `f3a2e84` | 0.16 | 4.48 | 0.04 | 1.08 |
+| [`vercel/hyper`](https://github.com/vercel/hyper) | mature-oss | `2a7bb18` | 0.60 | 1.05 | 0.15 | 0.26 |
+| [`umami-software/umami`](https://github.com/umami-software/umami) | mature-oss | `0a83864` | 0.12 | 3.26 | 0.04 | 1.05 |
+| [`vitejs/vite`](https://github.com/vitejs/vite) | mature-oss | `bdc53ab` | 0.26 | 7.98 | 0.08 | 2.36 |
+| [`withastro/astro`](https://github.com/withastro/astro) | mature-oss | `2c9bf5e` | 0.24 | 5.04 | 0.08 | 1.71 |
 
 Full benchmark assets:
 - manifest: [`benchmarks/sets/known-ai-vs-solid-oss.json`](benchmarks/sets/known-ai-vs-solid-oss.json)
