@@ -278,10 +278,12 @@ export async function analyzeRepository(
     file.lineCount = countPhysicalLines(text);
     file.logicalLineCount = countLogicalLines(text, file.path);
 
-    store.setFileFact(file.path, "file.record", file);
-    store.setFileFact(file.path, "file.text", text);
-    store.setFileFact(file.path, "file.lineCount", file.lineCount);
-    store.setFileFact(file.path, "file.logicalLineCount", file.logicalLineCount);
+    store.setFileFacts(file.path, {
+      "file.record": file,
+      "file.text": text,
+      "file.lineCount": file.lineCount,
+      "file.logicalLineCount": file.logicalLineCount,
+    });
 
     const context = { scope: "file", file, runtime } satisfies ProviderContext;
     await runProviders(orderedFileProviders, [context], store);

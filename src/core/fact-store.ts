@@ -56,6 +56,18 @@ export class FactStore implements FactStoreReader {
     facts[factId] = value;
   }
 
+  setFileFacts(filePath: string, values: FactsRecord): void {
+    const existingFacts = this.fileFacts.get(filePath);
+    if (existingFacts) {
+      for (const factId in values) {
+        existingFacts[factId] = values[factId];
+      }
+      return;
+    }
+
+    this.fileFacts.set(filePath, { ...values });
+  }
+
   hasFileFact(filePath: string, factId: string): boolean {
     const facts = this.fileFacts.get(filePath);
     return facts ? Object.hasOwn(facts, factId) : false;

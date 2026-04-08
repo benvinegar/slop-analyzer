@@ -20,3 +20,4 @@
 {"run":19,"commit":"f05c769","metric":7893.872,"metrics":{},"status":"keep","description":"Cut hot-loop allocations in provider fact writes and weighted finding collection","timestamp":1775665118283,"segment":0}
 {"run":20,"commit":"81fd39b","metric":7847.713,"metrics":{},"status":"keep","description":"Use object-backed fact buckets instead of inner Maps for repo, directory, and file fact lookups","timestamp":1775665209870,"segment":0}
 {"run":21,"commit":"81fd39b","metric":7969.133,"metrics":{},"status":"discard","description":"Inline provider and rule execution per context to avoid singleton context-array allocations","timestamp":1775665331858,"segment":0}
+{"run":22,"commit":"1cfc4c4","metric":7810.091,"metrics":{},"status":"keep","description":"Stop cloning durable fact sets on every file and trim retained fact buckets in one pass","timestamp":1775665384738,"segment":0}
