@@ -29,3 +29,5 @@
 {"run":28,"commit":"0143c91","metric":7791.422,"metrics":{},"status":"keep","description":"Avoid path join allocations in try/catch boundary-category detection by matching key segment pairs directly","timestamp":1775665740732,"segment":0}
 {"run":29,"commit":"0143c91","metric":7814.432,"metrics":{},"status":"discard","description":"Replace comment regex matchAll iteration with a manual exec loop","timestamp":1775665789305,"segment":0}
 {"run":30,"commit":"5f489a0","metric":7487.75,"metrics":{},"status":"keep","description":"Build duplicate-function serialization with a shared string-part buffer instead of per-node child strings","timestamp":1775665841096,"segment":0}
+{"run":31,"commit":"4219e2a","metric":7442.58,"metrics":{},"status":"keep","description":"Use a shared string-parts buffer for test mock node-shape fingerprinting instead of recursive child-string joins","timestamp":1775665899073,"segment":0}
+{"run":32,"commit":"4219e2a","metric":8682.092,"metrics":{},"status":"discard","description":"Stream duplicate-function serialization directly into the SHA-1 hash instead of joining a semantic-shape string first","timestamp":1775665993089,"segment":0}

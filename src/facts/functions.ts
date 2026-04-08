@@ -96,24 +96,22 @@ function serializeDuplicateFingerprintNode(node: ts.Node, localNames: Set<string
     }
 
     const label = ts.SyntaxKind[current.kind];
-    const children: ts.Node[] = [];
+    parts.push(label);
+
+    let childCount = 0;
     current.forEachChild((child) => {
-      children.push(child);
-    });
-
-    if (children.length === 0) {
-      parts.push(label);
-      return;
-    }
-
-    parts.push(label, "(");
-    for (let index = 0; index < children.length; index += 1) {
-      if (index > 0) {
+      if (childCount === 0) {
+        parts.push("(");
+      } else {
         parts.push(",");
       }
-      visit(children[index]!);
+      childCount += 1;
+      visit(child);
+    });
+
+    if (childCount > 0) {
+      parts.push(")");
     }
-    parts.push(")");
   }
 
   visit(node);
