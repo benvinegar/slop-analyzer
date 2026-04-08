@@ -18,3 +18,5 @@
 {"run":17,"commit":"d48202c","metric":8209.543,"metrics":{},"status":"discard","description":"Switch recursive discovery from async readdir to synchronous readdirSync","timestamp":1775665003004,"segment":0}
 {"run":18,"commit":"8292972","metric":8016.543,"metrics":{},"status":"keep","description":"Avoid await overhead for synchronous provider and rule executions by only awaiting promise-like results","timestamp":1775665063588,"segment":0}
 {"run":19,"commit":"f05c769","metric":7893.872,"metrics":{},"status":"keep","description":"Cut hot-loop allocations in provider fact writes and weighted finding collection","timestamp":1775665118283,"segment":0}
+{"run":20,"commit":"81fd39b","metric":7847.713,"metrics":{},"status":"keep","description":"Use object-backed fact buckets instead of inner Maps for repo, directory, and file fact lookups","timestamp":1775665209870,"segment":0}
+{"run":21,"commit":"81fd39b","metric":7969.133,"metrics":{},"status":"discard","description":"Inline provider and rule execution per context to avoid singleton context-array allocations","timestamp":1775665331858,"segment":0}

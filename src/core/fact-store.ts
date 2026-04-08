@@ -67,14 +67,18 @@ export class FactStore implements FactStoreReader {
       return;
     }
 
-    const keep = new Set(factIds);
-    for (const factId of Object.keys(facts)) {
-      if (!keep.has(factId)) {
-        delete facts[factId];
+    const keep = factIds instanceof Set ? factIds : new Set(factIds);
+    let hasFacts = false;
+    for (const factId in facts) {
+      if (keep.has(factId)) {
+        hasFacts = true;
+        continue;
       }
+
+      delete facts[factId];
     }
 
-    if (Object.keys(facts).length === 0) {
+    if (!hasFacts) {
       this.fileFacts.delete(filePath);
     }
   }
