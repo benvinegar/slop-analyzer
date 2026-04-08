@@ -51,13 +51,9 @@ export const duplicateMockSetupRule: RulePlugin = {
         // The second file establishes duplication; each additional file adds a
         // smaller increment instead of linearly exploding the score.
         score: Math.min(5, uniqueClusters.reduce((total, cluster) => total + 1 + (cluster.fileCount - 2) * 0.5, 0)),
-        locations: clusters
-          .filter((cluster) => cluster.occurrences.some((occurrence) => occurrence.path === context.file!.path))
-          .flatMap((cluster) =>
-            cluster.occurrences
-              .filter((occurrence) => occurrence.path === context.file!.path)
-              .map((occurrence) => ({ path: occurrence.path, line: occurrence.line })),
-          ),
+        locations: uniqueClusters.flatMap((cluster) =>
+          cluster.occurrences.map((occurrence) => ({ path: occurrence.path, line: occurrence.line })),
+        ),
       },
     ];
   },

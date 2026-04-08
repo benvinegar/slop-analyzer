@@ -234,6 +234,9 @@ describe("heuristic rule pack", () => {
     expect(duplicateFindings).toHaveLength(3);
     expect(duplicateFindings.every((finding) => finding.path?.startsWith("tests/user-"))).toBe(true);
     expect(duplicateFindings[0]?.evidence.some((entry) => entry.includes("mockResolvedValue"))).toBe(true);
+    expect(duplicateFindings[0]?.locations.some((location) => location.path === "tests/user-a.test.ts")).toBe(true);
+    expect(duplicateFindings[0]?.locations.some((location) => location.path === "tests/user-b.test.ts")).toBe(true);
+    expect(duplicateFindings[0]?.locations.some((location) => location.path === "tests/user-c.test.ts")).toBe(true);
   });
 
   test("does not treat test matrices or svg/icon packs as structural slop", async () => {
@@ -366,6 +369,9 @@ describe("heuristic rule pack", () => {
     expect(duplicateFindings).toHaveLength(3);
     expect(duplicateFindings.every((finding) => finding.path?.startsWith("src/"))).toBe(true);
     expect(duplicateFindings[0]?.evidence.some((entry) => entry.includes("repeated in 3 files"))).toBe(true);
+    expect(duplicateFindings[0]?.locations.some((location) => location.path === "src/users/normalize.ts")).toBe(true);
+    expect(duplicateFindings[0]?.locations.some((location) => location.path === "src/teams/normalize.ts")).toBe(true);
+    expect(duplicateFindings[0]?.locations.some((location) => location.path === "src/accounts/normalize.ts")).toBe(true);
   });
 
   test("stays quiet on a small clean repo", async () => {

@@ -1,6 +1,6 @@
 import type { AnalysisResult, Finding, FindingLocation, ReporterPlugin } from "../core/types";
 
-const MAX_FILE_GROUP_PREVIEW = 3;
+const MAX_FILE_GROUP_PREVIEW = 5;
 const MAX_LOCATION_PREVIEW_PER_FILE = 3;
 
 interface LocationGroup {
@@ -94,7 +94,6 @@ function renderFinding(finding: Finding): string {
   const groups = groupLocations(locations);
   const previewGroups = groups.slice(0, MAX_FILE_GROUP_PREVIEW);
   const hiddenGroups = groups.slice(MAX_FILE_GROUP_PREVIEW);
-  const hiddenLocationCount = hiddenGroups.reduce((sum, group) => sum + group.entries.length, 0);
   const lines = [`${finding.severity}  ${finding.message}  ${finding.ruleId}`];
 
   for (const group of previewGroups) {
@@ -102,9 +101,7 @@ function renderFinding(finding: Finding): string {
   }
 
   if (hiddenGroups.length > 0) {
-    lines.push(
-      `  ... and ${hiddenLocationCount} more location${hiddenLocationCount === 1 ? "" : "s"} across ${hiddenGroups.length} more file${hiddenGroups.length === 1 ? "" : "s"}`,
-    );
+    lines.push(`  ... and ${hiddenGroups.length} more file${hiddenGroups.length === 1 ? "" : "s"}`);
   }
 
   return lines.join("\n");
@@ -113,16 +110,19 @@ function renderFinding(finding: Finding): string {
 export const lintReporter: ReporterPlugin = {
   id: "lint",
   render(result: AnalysisResult): string {
-    const findings = [...result.findings].sort(compareFindings);
+    const renderedFindings = [...result.findings]
+      .sort(compareFindings)
+      .map(renderFinding)
+      .filter((rendered, index, values) => values.indexOf(rendered) === index);
 
-    if (findings.length === 0) {
+    if (renderedFindings.length === 0) {
       return "0 findings";
     }
 
     return [
-      ...findings.map(renderFinding),
+      ...renderedFindings,
       "",
-      `${findings.length} finding${findings.length === 1 ? "" : "s"}`,
+      `${renderedFindings.length} finding${renderedFindings.length === 1 ? "" : "s"}`,
     ].join("\n\n");
   },
 };

@@ -46,12 +46,9 @@ export const duplicateFunctionSignaturesRule: RulePlugin = {
           return `${cluster.label} repeated in ${cluster.fileCount} files${peers ? ` (also: ${peers})` : ""}`;
         }),
         score: Math.min(6, uniqueClusters.reduce((total, cluster) => total + 1.25 + (cluster.fileCount - 3) * 0.5, 0)),
-        locations: clusters
-          .flatMap((cluster) =>
-            cluster.occurrences
-              .filter((occurrence) => occurrence.path === context.file!.path)
-              .map((occurrence) => ({ path: occurrence.path, line: occurrence.line })),
-          ),
+        locations: uniqueClusters.flatMap((cluster) =>
+          cluster.occurrences.map((occurrence) => ({ path: occurrence.path, line: occurrence.line })),
+        ),
       },
     ];
   },
