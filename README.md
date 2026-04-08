@@ -1,10 +1,10 @@
-# repo-slop-analyzer
+# slop-analyzer
 
 Deterministic CLI for finding **AI-associated slop patterns** in JavaScript and TypeScript repositories.
 
 Scan a repo, surface the hotspots, and compare codebases using normalized slop metrics.
 
-> `repo-slop-analyzer` is a **slop analyzer**, not an authorship detector. It reports explainable patterns and suspicious density. It does **not** claim who wrote the code.
+> `slop-analyzer` is a **slop analyzer**, not an authorship detector. It reports explainable patterns and suspicious density. It does **not** claim who wrote the code.
 
 ## Why use it
 
@@ -25,13 +25,13 @@ Scan a repo, surface the hotspots, and compare codebases using normalized slop m
 Install globally with npm:
 
 ```bash
-npm install -g repo-slop-analyzer
+npm install -g slop-analyzer
 ```
 
 Or run it once with npx:
 
 ```bash
-npx repo-slop-analyzer scan .
+npx slop-analyzer scan .
 ```
 
 For local development in this repo:
@@ -45,13 +45,13 @@ bun install
 Scan the current repo:
 
 ```bash
-repo-slop-analyzer scan .
+slop-analyzer scan .
 ```
 
 Scan another repo and get JSON:
 
 ```bash
-repo-slop-analyzer scan /path/to/repo --json
+slop-analyzer scan /path/to/repo --json
 ```
 
 Recreate the pinned benchmark set from a source checkout:
@@ -165,7 +165,7 @@ Supported today:
 
 ## How it works
 
-`repo-slop-analyzer` is built as a pluggable engine:
+`slop-analyzer` is built as a pluggable engine:
 - language plugins
 - fact providers
 - rule plugins

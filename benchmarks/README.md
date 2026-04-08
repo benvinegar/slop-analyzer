@@ -1,6 +1,6 @@
 # Benchmarks
 
-This directory contains **recreatable pinned benchmark sets** for `repo-slop-analyzer`.
+This directory contains **recreatable pinned benchmark sets** for `slop-analyzer`.
 
 ## Why this exists
 

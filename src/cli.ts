@@ -5,11 +5,11 @@ import { loadConfig } from "./config";
 
 export function formatHelp(): string {
   return [
-    "repo-slop-analyzer",
+    "slop-analyzer",
     "",
     "Usage:",
-    "  repo-slop-analyzer scan [path] [--json]",
-    "  repo-slop-analyzer --help",
+    "  slop-analyzer scan [path] [--json]",
+    "  slop-analyzer --help",
     "",
     "Development:",
     "  bun run src/cli.ts scan [path] [--json]",

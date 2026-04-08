@@ -9,7 +9,7 @@ export const textReporter: ReporterPlugin = {
   render(result: AnalysisResult): string {
     const { summary } = result;
     const lines = [
-      "repo-slop-analyzer report",
+      "slop-analyzer report",
       `root: ${result.rootDir}`,
       `files scanned: ${summary.fileCount}`,
       `directories scanned: ${summary.directoryCount}`,
