@@ -1,1 +1,3 @@
 {"type":"config","name":"Optimize scanner throughput across representative repos","metricName":"total_ms","metricUnit":"ms","bestDirection":"lower"}
+{"run":1,"commit":"0479266","metric":15205.371,"metrics":{},"status":"keep","description":"Baseline: scanner throughput harness over agent-ci, umami, astro, and openclaw with test+build checks","timestamp":1775663387545,"segment":0}
+{"run":2,"commit":"0479266","metric":15566.403,"metrics":{},"status":"discard","description":"Precompile ignore regexes and switch discovery language lookup to a simple loop","timestamp":1775663501218,"segment":0}

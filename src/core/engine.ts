@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import type { AnalyzerConfig } from "../config";
 import { discoverSourceFiles } from "../discovery/walk";
-import { countLogicalLines } from "../facts/ts-helpers";
+import { countLogicalLines, countPhysicalLines } from "../facts/ts-helpers";
 import type { FunctionSummary } from "../facts/types";
 import { FactStore } from "./fact-store";
 import { Registry } from "./registry";
@@ -264,7 +264,7 @@ export async function analyzeRepository(
 
   for (const file of discovery.files) {
     const text = await readFile(file.absolutePath, "utf8");
-    file.lineCount = text.length === 0 ? 0 : text.split(/\r?\n/).length;
+    file.lineCount = countPhysicalLines(text);
     file.logicalLineCount = countLogicalLines(text, file.path);
 
     store.setFileFact(file.path, "file.record", file);

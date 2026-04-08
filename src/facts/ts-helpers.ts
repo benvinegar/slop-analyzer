@@ -29,19 +29,54 @@ export function getLineNumber(sourceFile: ts.SourceFile, position: number): numb
   return sourceFile.getLineAndCharacterOfPosition(position).line + 1;
 }
 
+export function countPhysicalLines(text: string): number {
+  if (text.length === 0) {
+    return 0;
+  }
+
+  let lines = 1;
+  for (let index = 0; index < text.length; index += 1) {
+    if (text.charCodeAt(index) === 10) {
+      lines += 1;
+    }
+  }
+
+  return lines;
+}
+
 export function countLogicalLines(text: string, filePath: string): number {
-  const sourceFile = ts.createSourceFile(filePath, text, ts.ScriptTarget.Latest, true, getScriptKind(filePath));
   const scanner = ts.createScanner(ts.ScriptTarget.Latest, true, getLanguageVariant(filePath), text);
-  const logicalLines = new Set<number>();
+  let cursor = 0;
+  let currentLine = 1;
+  let lastLogicalLine = 0;
+  let logicalLineCount = 0;
 
   let token = scanner.scan();
   while (token !== ts.SyntaxKind.EndOfFileToken) {
-    const tokenLine = sourceFile.getLineAndCharacterOfPosition(scanner.getTokenPos()).line + 1;
-    logicalLines.add(tokenLine);
+    const tokenPos = scanner.getTokenPos();
+
+    while (cursor < tokenPos) {
+      const char = text.charCodeAt(cursor);
+      if (char === 13) {
+        currentLine += 1;
+        if (text.charCodeAt(cursor + 1) === 10) {
+          cursor += 1;
+        }
+      } else if (char === 10) {
+        currentLine += 1;
+      }
+      cursor += 1;
+    }
+
+    if (currentLine !== lastLogicalLine) {
+      logicalLineCount += 1;
+      lastLogicalLine = currentLine;
+    }
+
     token = scanner.scan();
   }
 
-  return logicalLines.size;
+  return logicalLineCount;
 }
 
 export function walk(node: ts.Node, visit: (node: ts.Node) => void): void {
