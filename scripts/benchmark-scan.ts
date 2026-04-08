@@ -1,7 +1,8 @@
+import { spawnSync } from "node:child_process";
 import { access, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { spawnSync } from "node:child_process";
 import packageJson from "../package.json";
+import { getOption } from "./lib/get-option";
 import {
   DEFAULT_BENCHMARK_SET_PATH,
   loadBenchmarkSet,
@@ -11,11 +12,6 @@ import { createBenchmarkSnapshot } from "../src/benchmarks/snapshot";
 import { DEFAULT_CONFIG } from "../src/config";
 import { analyzeRepository } from "../src/core/engine";
 import { createDefaultRegistry } from "../src/default-registry";
-
-function getOption(argv: string[], flag: string, fallback: string): string {
-  const index = argv.indexOf(flag);
-  return index >= 0 && argv[index + 1] ? argv[index + 1] : fallback;
-}
 
 async function assertExists(targetPath: string, message: string): Promise<void> {
   try {

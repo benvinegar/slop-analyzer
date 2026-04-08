@@ -1,6 +1,6 @@
 import type { RulePlugin } from "../../core/types";
 import type { CommentSummary, FunctionSummary } from "../../facts/types";
-import { isBoundaryWrapperTarget } from "../helpers";
+import { BOUNDARY_WRAPPER_TARGET_PREFIXES } from "../helpers";
 
 // Nearby wording like "alias" or "backward compatibility" usually means the
 // wrapper exists to preserve an API name rather than because the author lazily
@@ -61,7 +61,9 @@ export const passThroughWrappersRule: RulePlugin = {
       (summary) =>
         summary.isPassThroughWrapper &&
         !hasNearbyAliasComment(summary, comments) &&
-        !isBoundaryWrapperTarget(summary.passThroughTarget),
+        !BOUNDARY_WRAPPER_TARGET_PREFIXES.some((prefix) =>
+          summary.passThroughTarget?.startsWith(prefix),
+        ),
     );
 
     if (wrappers.length === 0) {

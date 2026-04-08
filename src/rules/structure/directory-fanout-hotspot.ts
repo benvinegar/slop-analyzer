@@ -1,14 +1,8 @@
+import path from "node:path";
 import type { RulePlugin } from "../../core/types";
 import { isTestFile } from "../../facts/ts-helpers";
 import type { DirectoryMetrics } from "../../facts/types";
-import {
-  average,
-  countMatching,
-  isAssetLikeDirectoryPath,
-  median,
-  parentDirectoryPath,
-  ratio,
-} from "../helpers";
+import { average, countMatching, isAssetLikeDirectoryPath, median, ratio } from "../helpers";
 
 /**
  * Flags directories whose file count is unusually large relative to nearby
@@ -46,9 +40,9 @@ export const directoryFanoutHotspotRule: RulePlugin = {
       return [];
     }
 
-    const parentPath = parentDirectoryPath(context.directory!.path);
+    const parentPath = path.posix.dirname(context.directory!.path);
     const siblingCounts = context.runtime.directories
-      .filter((directory) => parentDirectoryPath(directory.path) === parentPath)
+      .filter((directory) => path.posix.dirname(directory.path) === parentPath)
       .map(
         (directory) =>
           context.runtime.store.getDirectoryFact<DirectoryMetrics>(

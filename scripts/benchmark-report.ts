@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { getOption } from "./lib/get-option";
 import {
   DEFAULT_BENCHMARK_SET_PATH,
   loadBenchmarkSet,
@@ -7,11 +8,6 @@ import {
 } from "../src/benchmarks/manifest";
 import { renderBenchmarkReport } from "../src/benchmarks/report";
 import type { BenchmarkSnapshot } from "../src/benchmarks/types";
-
-function getOption(argv: string[], flag: string, fallback: string): string {
-  const index = argv.indexOf(flag);
-  return index >= 0 && argv[index + 1] ? argv[index + 1] : fallback;
-}
 
 const manifestPath = getOption(process.argv.slice(2), "--manifest", DEFAULT_BENCHMARK_SET_PATH);
 const benchmarkSet = await loadBenchmarkSet(manifestPath);

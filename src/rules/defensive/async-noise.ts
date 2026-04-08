@@ -1,6 +1,6 @@
 import type { RulePlugin } from "../../core/types";
 import type { FunctionSummary } from "../../facts/types";
-import { isBoundaryWrapperTarget } from "../helpers";
+import { BOUNDARY_WRAPPER_TARGET_PREFIXES } from "../helpers";
 
 /**
  * Flags async-related ceremony that adds little value:
@@ -36,7 +36,9 @@ export const asyncNoiseRule: RulePlugin = {
         summary.isPassThroughWrapper &&
         !summary.hasReturnAwaitCall &&
         // Edge-facing wrappers often keep async signatures for API consistency.
-        !isBoundaryWrapperTarget(summary.passThroughTarget),
+        !BOUNDARY_WRAPPER_TARGET_PREFIXES.some((prefix) =>
+          summary.passThroughTarget?.startsWith(prefix),
+        ),
     );
     const noisy = [...redundantReturnAwait, ...asyncPassThroughWrappers];
 

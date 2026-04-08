@@ -1,16 +1,12 @@
+import { spawnSync } from "node:child_process";
 import { access, mkdir } from "node:fs/promises";
 import path from "node:path";
-import { spawnSync } from "node:child_process";
+import { getOption } from "./lib/get-option";
 import {
   DEFAULT_BENCHMARK_SET_PATH,
   loadBenchmarkSet,
   resolveProjectPath,
 } from "../src/benchmarks/manifest";
-
-function getOption(argv: string[], flag: string, fallback: string): string {
-  const index = argv.indexOf(flag);
-  return index >= 0 && argv[index + 1] ? argv[index + 1] : fallback;
-}
 
 function run(command: string, args: string[], cwd?: string): string {
   const result = spawnSync(command, args, {

@@ -1,27 +1,25 @@
 {
   "scannerVersion": "0.1.2",
   "summary": {
-    "fileCount": 54,
-    "directoryCount": 15,
-    "findingCount": 9,
-    "repoScore": 13.02142857142857,
-    "physicalLineCount": 5194,
-    "logicalLineCount": 3623,
-    "functionCount": 176,
+    "fileCount": 55,
+    "directoryCount": 16,
+    "findingCount": 5,
+    "repoScore": 7.271428571428571,
+    "physicalLineCount": 5167,
+    "logicalLineCount": 3606,
+    "functionCount": 172,
     "normalized": {
-      "scorePerFile": 0.24113756613756612,
-      "scorePerKloc": 3.594101178975592,
-      "scorePerFunction": 0.0739853896103896,
-      "findingsPerFile": 0.16666666666666666,
-      "findingsPerKloc": 2.484129174717085,
-      "findingsPerFunction": 0.05113636363636364
+      "scorePerFile": 0.13220779220779222,
+      "scorePerKloc": 2.016480469059504,
+      "scorePerFunction": 0.04227574750830565,
+      "findingsPerFile": 0.09090909090909091,
+      "findingsPerKloc": 1.3865779256794233,
+      "findingsPerFunction": 0.029069767441860465
     }
   },
   "ruleCounts": {
-    "structure.duplicate-function-signatures": 3,
     "comments.placeholder-comments": 2,
     "defensive.needless-try-catch": 2,
-    "structure.directory-fanout-hotspot": 1,
-    "structure.pass-through-wrappers": 1
+    "structure.directory-fanout-hotspot": 1
   }
 }
