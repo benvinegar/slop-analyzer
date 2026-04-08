@@ -1,6 +1,6 @@
 {
   "name": "slop-analyzer",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "description": "Deterministic CLI for finding AI-associated slop patterns in JavaScript and TypeScript repositories.",
   "bin": {
