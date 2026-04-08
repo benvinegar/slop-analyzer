@@ -29,7 +29,10 @@ export const directoryFanoutHotspotRule: RulePlugin = {
   },
   evaluate(context) {
     const metrics =
-      context.runtime.store.getDirectoryFact<DirectoryMetrics>(context.directory!.path, "directory.metrics") ?? null;
+      context.runtime.store.getDirectoryFact<DirectoryMetrics>(
+        context.directory!.path,
+        "directory.metrics",
+      ) ?? null;
 
     if (!metrics || context.directory!.path === ".") {
       return [];
@@ -46,10 +49,22 @@ export const directoryFanoutHotspotRule: RulePlugin = {
     const parentPath = parentDirectoryPath(context.directory!.path);
     const siblingCounts = context.runtime.directories
       .filter((directory) => parentDirectoryPath(directory.path) === parentPath)
-      .map((directory) => context.runtime.store.getDirectoryFact<DirectoryMetrics>(directory.path, "directory.metrics")?.fileCount ?? 0)
+      .map(
+        (directory) =>
+          context.runtime.store.getDirectoryFact<DirectoryMetrics>(
+            directory.path,
+            "directory.metrics",
+          )?.fileCount ?? 0,
+      )
       .filter((value) => value > 0);
     const globalCounts = context.runtime.directories
-      .map((directory) => context.runtime.store.getDirectoryFact<DirectoryMetrics>(directory.path, "directory.metrics")?.fileCount ?? 0)
+      .map(
+        (directory) =>
+          context.runtime.store.getDirectoryFact<DirectoryMetrics>(
+            directory.path,
+            "directory.metrics",
+          )?.fileCount ?? 0,
+      )
       .filter((value) => value > 0);
 
     // Prefer a sibling baseline when the repo gives us enough local context.

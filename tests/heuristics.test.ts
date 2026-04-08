@@ -125,13 +125,21 @@ describe("heuristic rule pack", () => {
     });
 
     const result = await analyzeRepository(rootDir, DEFAULT_CONFIG, createDefaultRegistry());
-    const ioFinding = result.findings.find((finding) => finding.path === "src/io.ts" && finding.ruleId === "defensive.needless-try-catch");
-    const leafFinding = result.findings.find((finding) => finding.path === "src/leaf.ts" && finding.ruleId === "defensive.needless-try-catch");
+    const ioFinding = result.findings.find(
+      (finding) =>
+        finding.path === "src/io.ts" && finding.ruleId === "defensive.needless-try-catch",
+    );
+    const leafFinding = result.findings.find(
+      (finding) =>
+        finding.path === "src/leaf.ts" && finding.ruleId === "defensive.needless-try-catch",
+    );
 
     expect(ioFinding).toBeDefined();
     expect(leafFinding).toBeDefined();
     expect(ioFinding?.score ?? 0).toBeLessThan(leafFinding?.score ?? 0);
-    expect(ioFinding?.evidence.some((entry) => entry.includes("boundary=config|filesystem"))).toBe(true);
+    expect(ioFinding?.evidence.some((entry) => entry.includes("boundary=config|filesystem"))).toBe(
+      true,
+    );
     expect(ioFinding?.locations).toHaveLength(1);
   });
 
@@ -162,12 +170,9 @@ describe("heuristic rule pack", () => {
 
   test("flags duplicated mock setup across test files", async () => {
     const rootDir = await createTempRepo({
-      "src/api.ts": [
-        "export async function fetchUser() {",
-        "  return { id: 1 };",
-        "}",
-        "",
-      ].join("\n"),
+      "src/api.ts": ["export async function fetchUser() {", "  return { id: 1 };", "}", ""].join(
+        "\n",
+      ),
       "tests/user-a.test.ts": [
         "import { describe, expect, it, vi } from 'vitest';",
         "import * as api from '../src/api';",
@@ -229,14 +234,26 @@ describe("heuristic rule pack", () => {
     });
 
     const result = await analyzeRepository(rootDir, DEFAULT_CONFIG, createDefaultRegistry());
-    const duplicateFindings = result.findings.filter((finding) => finding.ruleId === "tests.duplicate-mock-setup");
+    const duplicateFindings = result.findings.filter(
+      (finding) => finding.ruleId === "tests.duplicate-mock-setup",
+    );
 
     expect(duplicateFindings).toHaveLength(3);
-    expect(duplicateFindings.every((finding) => finding.path?.startsWith("tests/user-"))).toBe(true);
-    expect(duplicateFindings[0]?.evidence.some((entry) => entry.includes("mockResolvedValue"))).toBe(true);
-    expect(duplicateFindings[0]?.locations.some((location) => location.path === "tests/user-a.test.ts")).toBe(true);
-    expect(duplicateFindings[0]?.locations.some((location) => location.path === "tests/user-b.test.ts")).toBe(true);
-    expect(duplicateFindings[0]?.locations.some((location) => location.path === "tests/user-c.test.ts")).toBe(true);
+    expect(duplicateFindings.every((finding) => finding.path?.startsWith("tests/user-"))).toBe(
+      true,
+    );
+    expect(
+      duplicateFindings[0]?.evidence.some((entry) => entry.includes("mockResolvedValue")),
+    ).toBe(true);
+    expect(
+      duplicateFindings[0]?.locations.some((location) => location.path === "tests/user-a.test.ts"),
+    ).toBe(true);
+    expect(
+      duplicateFindings[0]?.locations.some((location) => location.path === "tests/user-b.test.ts"),
+    ).toBe(true);
+    expect(
+      duplicateFindings[0]?.locations.some((location) => location.path === "tests/user-c.test.ts"),
+    ).toBe(true);
   });
 
   test("does not treat test matrices or svg/icon packs as structural slop", async () => {
@@ -309,8 +326,12 @@ describe("heuristic rule pack", () => {
 
     const result = await analyzeRepository(rootDir, DEFAULT_CONFIG, createDefaultRegistry());
 
-    expect(result.findings.some((finding) => finding.ruleId === "defensive.async-noise")).toBe(false);
-    expect(result.findings.some((finding) => finding.ruleId === "structure.pass-through-wrappers")).toBe(false);
+    expect(result.findings.some((finding) => finding.ruleId === "defensive.async-noise")).toBe(
+      false,
+    );
+    expect(
+      result.findings.some((finding) => finding.ruleId === "structure.pass-through-wrappers"),
+    ).toBe(false);
   });
 
   test("flags duplicated helper signatures across source files", async () => {
@@ -364,14 +385,30 @@ describe("heuristic rule pack", () => {
     });
 
     const result = await analyzeRepository(rootDir, DEFAULT_CONFIG, createDefaultRegistry());
-    const duplicateFindings = result.findings.filter((finding) => finding.ruleId === "structure.duplicate-function-signatures");
+    const duplicateFindings = result.findings.filter(
+      (finding) => finding.ruleId === "structure.duplicate-function-signatures",
+    );
 
     expect(duplicateFindings).toHaveLength(3);
     expect(duplicateFindings.every((finding) => finding.path?.startsWith("src/"))).toBe(true);
-    expect(duplicateFindings[0]?.evidence.some((entry) => entry.includes("repeated in 3 files"))).toBe(true);
-    expect(duplicateFindings[0]?.locations.some((location) => location.path === "src/users/normalize.ts")).toBe(true);
-    expect(duplicateFindings[0]?.locations.some((location) => location.path === "src/teams/normalize.ts")).toBe(true);
-    expect(duplicateFindings[0]?.locations.some((location) => location.path === "src/accounts/normalize.ts")).toBe(true);
+    expect(
+      duplicateFindings[0]?.evidence.some((entry) => entry.includes("repeated in 3 files")),
+    ).toBe(true);
+    expect(
+      duplicateFindings[0]?.locations.some(
+        (location) => location.path === "src/users/normalize.ts",
+      ),
+    ).toBe(true);
+    expect(
+      duplicateFindings[0]?.locations.some(
+        (location) => location.path === "src/teams/normalize.ts",
+      ),
+    ).toBe(true);
+    expect(
+      duplicateFindings[0]?.locations.some(
+        (location) => location.path === "src/accounts/normalize.ts",
+      ),
+    ).toBe(true);
   });
 
   test("stays quiet on a small clean repo", async () => {

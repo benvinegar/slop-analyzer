@@ -28,7 +28,9 @@ function median(values: number[]): number | null {
 }
 
 function divideOrNull(numerator: number | null, denominator: number | null): number | null {
-  return numerator !== null && denominator !== null && denominator !== 0 ? numerator / denominator : null;
+  return numerator !== null && denominator !== null && denominator !== 0
+    ? numerator / denominator
+    : null;
 }
 
 function summarizeRuleCounts(findings: Finding[]): Record<string, number> {
@@ -38,7 +40,11 @@ function summarizeRuleCounts(findings: Finding[]): Record<string, number> {
     counts.set(finding.ruleId, (counts.get(finding.ruleId) ?? 0) + 1);
   }
 
-  return Object.fromEntries([...counts.entries()].sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0])));
+  return Object.fromEntries(
+    [...counts.entries()].sort(
+      (left, right) => right[1] - left[1] || left[0].localeCompare(right[0]),
+    ),
+  );
 }
 
 function buildRepoSnapshot({ spec, result }: BenchmarkedAnalysis): BenchmarkRepoSnapshot {
@@ -78,7 +84,10 @@ function geometricMean(values: number[]): number | null {
   return Math.exp(values.reduce((sum, value) => sum + Math.log(value), 0) / values.length);
 }
 
-function computeRawBlendedScore(metrics: NormalizedMetrics, matureMedian: NormalizedMetrics): number | null {
+function computeRawBlendedScore(
+  metrics: NormalizedMetrics,
+  matureMedian: NormalizedMetrics,
+): number | null {
   const ratios = NORMALIZED_METRIC_KEYS.flatMap((metricKey) => {
     const value = metrics[metricKey];
     const baseline = matureMedian[metricKey];
@@ -93,7 +102,9 @@ function computeRawBlendedScore(metrics: NormalizedMetrics, matureMedian: Normal
   return geometricMean(ratios);
 }
 
-function buildCohortSnapshots(repos: BenchmarkRepoSnapshot[]): Record<BenchmarkCohort, BenchmarkCohortSnapshot> {
+function buildCohortSnapshots(
+  repos: BenchmarkRepoSnapshot[],
+): Record<BenchmarkCohort, BenchmarkCohortSnapshot> {
   const cohorts: Record<BenchmarkCohort, BenchmarkRepoSnapshot[]> = {
     "explicit-ai": [],
     "mature-oss": [],
@@ -119,7 +130,10 @@ function buildCohortSnapshots(repos: BenchmarkRepoSnapshot[]): Record<BenchmarkC
   };
 }
 
-function applyBlendedScores(repos: BenchmarkRepoSnapshot[], matureMedian: NormalizedMetrics): BenchmarkRepoSnapshot[] {
+function applyBlendedScores(
+  repos: BenchmarkRepoSnapshot[],
+  matureMedian: NormalizedMetrics,
+): BenchmarkRepoSnapshot[] {
   const rawScores = repos.map((repo) => ({
     repo,
     rawBlendedScore: computeRawBlendedScore(repo.summary.normalized, matureMedian),
@@ -147,7 +161,9 @@ function buildPairings(set: BenchmarkSet, repos: BenchmarkRepoSnapshot[]): Bench
     const solidRepo = repos.find((repo) => repo.id === pairing.solidRepoId);
 
     if (!aiRepo || !solidRepo) {
-      throw new Error(`Unable to resolve benchmark pairing ${pairing.aiRepoId} -> ${pairing.solidRepoId}`);
+      throw new Error(
+        `Unable to resolve benchmark pairing ${pairing.aiRepoId} -> ${pairing.solidRepoId}`,
+      );
     }
 
     const ratios = Object.fromEntries(

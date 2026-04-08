@@ -1,4 +1,9 @@
-import type { BenchmarkCohort, BenchmarkRepoSnapshot, BenchmarkSet, BenchmarkSnapshot } from "./types";
+import type {
+  BenchmarkCohort,
+  BenchmarkRepoSnapshot,
+  BenchmarkSet,
+  BenchmarkSnapshot,
+} from "./types";
 import { NORMALIZED_METRIC_KEYS } from "./types";
 
 function formatMetric(value: number | null, digits = 2): string {
@@ -46,7 +51,11 @@ function sortByBlendedScore(repos: BenchmarkRepoSnapshot[]): BenchmarkRepoSnapsh
   });
 }
 
-function renderRepoTable(set: BenchmarkSet, snapshot: BenchmarkSnapshot, cohort: BenchmarkCohort): string[] {
+function renderRepoTable(
+  set: BenchmarkSet,
+  snapshot: BenchmarkSnapshot,
+  cohort: BenchmarkCohort,
+): string[] {
   const repos = sortByBlendedScore(snapshot.repos.filter((repo) => repo.cohort === cohort));
 
   const lines = [
@@ -72,7 +81,9 @@ function renderRepoTable(set: BenchmarkSet, snapshot: BenchmarkSnapshot, cohort:
 function renderCohortRuleSummary(repos: BenchmarkRepoSnapshot[]): string[] {
   return aggregateRuleCounts(repos)
     .slice(0, 6)
-    .map(([ruleId, count, fraction]) => `- \`${ruleId}\` — ${count} (${(fraction * 100).toFixed(1)}%)`);
+    .map(
+      ([ruleId, count, fraction]) => `- \`${ruleId}\` — ${count} (${(fraction * 100).toFixed(1)}%)`,
+    );
 }
 
 export function renderBenchmarkReport(set: BenchmarkSet, snapshot: BenchmarkSnapshot): string {
@@ -83,13 +94,17 @@ export function renderBenchmarkReport(set: BenchmarkSet, snapshot: BenchmarkSnap
   const aiMedian = aiCohort.medians;
   const solidMedian = solidCohort.medians;
   const blendedMedianRatio =
-    aiCohort.blendedScoreMedian !== null && solidCohort.blendedScoreMedian !== null && solidCohort.blendedScoreMedian !== 0
+    aiCohort.blendedScoreMedian !== null &&
+    solidCohort.blendedScoreMedian !== null &&
+    solidCohort.blendedScoreMedian !== 0
       ? aiCohort.blendedScoreMedian / solidCohort.blendedScoreMedian
       : null;
   const medianRatios = Object.fromEntries(
     NORMALIZED_METRIC_KEYS.map((metricKey) => [
       metricKey,
-      aiMedian[metricKey] !== null && solidMedian[metricKey] !== null && solidMedian[metricKey] !== 0
+      aiMedian[metricKey] !== null &&
+      solidMedian[metricKey] !== null &&
+      solidMedian[metricKey] !== 0
         ? aiMedian[metricKey] / solidMedian[metricKey]
         : null,
     ]),

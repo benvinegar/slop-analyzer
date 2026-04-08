@@ -24,7 +24,9 @@ export const functionDuplicationFactProvider: FactProvider = {
         continue;
       }
 
-      const functions = context.runtime.store.getFileFact<FunctionSummary[]>(file.path, "file.functionSummaries") ?? [];
+      const functions =
+        context.runtime.store.getFileFact<FunctionSummary[]>(file.path, "file.functionSummaries") ??
+        [];
       for (const summary of functions) {
         if (!summary.duplicationFingerprint) {
           continue;
@@ -51,7 +53,9 @@ export const functionDuplicationFactProvider: FactProvider = {
         fileCount: new Set(cluster.occurrences.map((occurrence) => occurrence.path)).size,
       }))
       .filter((cluster) => cluster.fileCount >= MIN_CLUSTER_FILE_COUNT)
-      .sort((left, right) => right.fileCount - left.fileCount || left.label.localeCompare(right.label));
+      .sort(
+        (left, right) => right.fileCount - left.fileCount || left.label.localeCompare(right.label),
+      );
 
     const byFile: Record<string, DuplicateFunctionCluster[]> = {};
     for (const cluster of clusters) {

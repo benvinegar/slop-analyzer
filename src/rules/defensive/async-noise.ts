@@ -21,18 +21,22 @@ export const asyncNoiseRule: RulePlugin = {
   },
   evaluate(context) {
     const functions =
-      context.runtime.store.getFileFact<FunctionSummary[]>(context.file!.path, "file.functionSummaries") ?? [];
+      context.runtime.store.getFileFact<FunctionSummary[]>(
+        context.file!.path,
+        "file.functionSummaries",
+      ) ?? [];
 
     // Keep the two sub-signals separate so we can weight redundant `return await`
     // more heavily than a plain pass-through async wrapper.
     const redundantReturnAwait = functions.filter((summary) => summary.hasReturnAwaitCall);
     const asyncPassThroughWrappers = functions.filter(
-      (summary) => summary.isAsync
-        && !summary.hasAwait
-        && summary.isPassThroughWrapper
-        && !summary.hasReturnAwaitCall
+      (summary) =>
+        summary.isAsync &&
+        !summary.hasAwait &&
+        summary.isPassThroughWrapper &&
+        !summary.hasReturnAwaitCall &&
         // Edge-facing wrappers often keep async signatures for API consistency.
-        && !isBoundaryWrapperTarget(summary.passThroughTarget),
+        !isBoundaryWrapperTarget(summary.passThroughTarget),
     );
     const noisy = [...redundantReturnAwait, ...asyncPassThroughWrappers];
 
@@ -42,7 +46,10 @@ export const asyncNoiseRule: RulePlugin = {
 
     // Bound the contribution from one file so this stays a hotspot signal rather
     // than dominating the total repo score.
-    const score = Math.min(4, redundantReturnAwait.length * 1.5 + asyncPassThroughWrappers.length * 0.75);
+    const score = Math.min(
+      4,
+      redundantReturnAwait.length * 1.5 + asyncPassThroughWrappers.length * 0.75,
+    );
 
     return [
       {

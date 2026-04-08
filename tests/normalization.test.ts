@@ -44,12 +44,7 @@ describe("normalization metrics", () => {
         "}",
         "",
       ].join("\n"),
-      "src/two.ts": [
-        "export function plain() {",
-        "  return 1;",
-        "}",
-        "",
-      ].join("\n"),
+      "src/two.ts": ["export function plain() {", "  return 1;", "}", ""].join("\n"),
     });
 
     try {

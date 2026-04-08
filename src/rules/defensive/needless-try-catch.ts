@@ -11,17 +11,15 @@ import type { TryCatchSummary } from "../../facts/types";
  */
 function isNeedless(summary: TryCatchSummary): boolean {
   return (
-    summary.hasCatchClause
+    summary.hasCatchClause &&
     // Small try blocks are the strongest smell here: a tiny region with a weak
     // catch often means the wrapper was generated out of habit.
-    && summary.tryStatementCount <= 2
-    && (
-      summary.catchLogsOnly
-      || summary.catchReturnsDefault
-      || summary.catchIsEmpty
-      || summary.catchThrowsGeneric
-      || (summary.catchHasLogging && summary.catchHasDefaultReturn)
-    )
+    summary.tryStatementCount <= 2 &&
+    (summary.catchLogsOnly ||
+      summary.catchReturnsDefault ||
+      summary.catchIsEmpty ||
+      summary.catchThrowsGeneric ||
+      (summary.catchHasLogging && summary.catchHasDefaultReturn))
   );
 }
 
@@ -61,7 +59,10 @@ export const needlessTryCatchRule: RulePlugin = {
   },
   evaluate(context) {
     const summaries =
-      context.runtime.store.getFileFact<TryCatchSummary[]>(context.file!.path, "file.tryCatchSummaries") ?? [];
+      context.runtime.store.getFileFact<TryCatchSummary[]>(
+        context.file!.path,
+        "file.tryCatchSummaries",
+      ) ?? [];
 
     const flagged = summaries.filter(isNeedless);
 
@@ -78,10 +79,14 @@ export const needlessTryCatchRule: RulePlugin = {
         path: context.file!.path,
         message: `Found ${flagged.length} defensive try/catch block${flagged.length === 1 ? "" : "s"}`,
         evidence: flagged.map((summary) => {
-          const boundary = summary.boundaryCategories.length > 0 ? summary.boundaryCategories.join("|") : "none";
+          const boundary =
+            summary.boundaryCategories.length > 0 ? summary.boundaryCategories.join("|") : "none";
           return `line ${summary.line}: try=${summary.tryStatementCount}, catch=${summary.catchStatementCount}, logsOnly=${summary.catchLogsOnly}, returnsDefault=${summary.catchReturnsDefault}, boundary=${boundary}`;
         }),
-        score: Math.min(8, flagged.reduce((total, summary) => total + scoreTryCatch(summary), 0)),
+        score: Math.min(
+          8,
+          flagged.reduce((total, summary) => total + scoreTryCatch(summary), 0),
+        ),
         locations: flagged.map((summary) => ({ path: context.file!.path, line: summary.line })),
       },
     ];

@@ -22,7 +22,11 @@ const ALIAS_COMMENT_PATTERNS = [
 function hasNearbyAliasComment(summary: FunctionSummary, comments: CommentSummary[]): boolean {
   return comments.some((comment) => {
     const lineDelta = summary.line - comment.line;
-    return lineDelta >= 1 && lineDelta <= 2 && ALIAS_COMMENT_PATTERNS.some((pattern) => pattern.test(comment.text));
+    return (
+      lineDelta >= 1 &&
+      lineDelta <= 2 &&
+      ALIAS_COMMENT_PATTERNS.some((pattern) => pattern.test(comment.text))
+    );
   });
 }
 
@@ -45,14 +49,19 @@ export const passThroughWrappersRule: RulePlugin = {
   },
   evaluate(context) {
     const functions =
-      context.runtime.store.getFileFact<FunctionSummary[]>(context.file!.path, "file.functionSummaries") ?? [];
+      context.runtime.store.getFileFact<FunctionSummary[]>(
+        context.file!.path,
+        "file.functionSummaries",
+      ) ?? [];
     const comments =
-      context.runtime.store.getFileFact<CommentSummary[]>(context.file!.path, "file.comments") ?? [];
+      context.runtime.store.getFileFact<CommentSummary[]>(context.file!.path, "file.comments") ??
+      [];
 
     const wrappers = functions.filter(
-      (summary) => summary.isPassThroughWrapper
-        && !hasNearbyAliasComment(summary, comments)
-        && !isBoundaryWrapperTarget(summary.passThroughTarget),
+      (summary) =>
+        summary.isPassThroughWrapper &&
+        !hasNearbyAliasComment(summary, comments) &&
+        !isBoundaryWrapperTarget(summary.passThroughTarget),
     );
 
     if (wrappers.length === 0) {
@@ -68,7 +77,8 @@ export const passThroughWrappersRule: RulePlugin = {
         path: context.file!.path,
         message: `Found ${wrappers.length} pass-through wrapper${wrappers.length === 1 ? "" : "s"}`,
         evidence: wrappers.map(
-          (summary) => `${summary.name} at line ${summary.line}${summary.passThroughTarget ? ` -> ${summary.passThroughTarget}` : ""}`,
+          (summary) =>
+            `${summary.name} at line ${summary.line}${summary.passThroughTarget ? ` -> ${summary.passThroughTarget}` : ""}`,
         ),
         // Each wrapper matters, but cap the file contribution so one adapter file
         // cannot swamp the repo score by itself.

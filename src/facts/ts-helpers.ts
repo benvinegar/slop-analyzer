@@ -45,7 +45,12 @@ export function countPhysicalLines(text: string): number {
 }
 
 export function countLogicalLines(text: string, filePath: string): number {
-  const scanner = ts.createScanner(ts.ScriptTarget.Latest, true, getLanguageVariant(filePath), text);
+  const scanner = ts.createScanner(
+    ts.ScriptTarget.Latest,
+    true,
+    getLanguageVariant(filePath),
+    text,
+  );
   let cursor = 0;
   let currentLine = 1;
   let lastLogicalLine = 0;
@@ -94,11 +99,11 @@ export function countNodes(node: ts.Node): number {
 
 export function isTestFile(filePath: string): boolean {
   return (
-    filePath.includes("/__tests__/")
-    || filePath.includes("/tests/")
-    || filePath.includes("/test/")
-    || /(?:\.|-|_)test\.[cm]?[jt]sx?$/.test(filePath)
-    || /(?:\.|-|_)spec\.[cm]?[jt]sx?$/.test(filePath)
+    filePath.includes("/__tests__/") ||
+    filePath.includes("/tests/") ||
+    filePath.includes("/test/") ||
+    /(?:\.|-|_)test\.[cm]?[jt]sx?$/.test(filePath) ||
+    /(?:\.|-|_)spec\.[cm]?[jt]sx?$/.test(filePath)
   );
 }
 
@@ -112,9 +117,12 @@ export function fingerprintNodeShape(node: ts.Node, maxDepth = 4): string {
       return;
     }
 
-    const children = current.getChildren().filter(
-      (child) => child.kind !== ts.SyntaxKind.SyntaxList && child.kind !== ts.SyntaxKind.EndOfFileToken,
-    );
+    const children = current
+      .getChildren()
+      .filter(
+        (child) =>
+          child.kind !== ts.SyntaxKind.SyntaxList && child.kind !== ts.SyntaxKind.EndOfFileToken,
+      );
 
     if (children.length === 0) {
       parts.push(label);
@@ -139,7 +147,10 @@ export function getNodeStatementCount(node: ts.Block | undefined): number {
   return node?.statements.length ?? 0;
 }
 
-export function getFunctionName(node: ts.FunctionLikeDeclarationBase, sourceFile: ts.SourceFile): string {
+export function getFunctionName(
+  node: ts.FunctionLikeDeclarationBase,
+  sourceFile: ts.SourceFile,
+): string {
   if (node.name && ts.isIdentifier(node.name)) {
     return node.name.text;
   }
@@ -174,7 +185,11 @@ export function isLoggingCall(expression: ts.Expression): boolean {
 }
 
 export function unwrapExpression(expression: ts.Expression): ts.Expression {
-  if (ts.isParenthesizedExpression(expression) || ts.isAsExpression(expression) || ts.isSatisfiesExpression(expression)) {
+  if (
+    ts.isParenthesizedExpression(expression) ||
+    ts.isAsExpression(expression) ||
+    ts.isSatisfiesExpression(expression)
+  ) {
     return unwrapExpression(expression.expression);
   }
 
@@ -222,7 +237,10 @@ export function isDefaultLiteral(expression: ts.Expression | undefined): boolean
 
   const unwrapped = unwrapExpression(expression);
 
-  if (unwrapped.kind === ts.SyntaxKind.NullKeyword || unwrapped.kind === ts.SyntaxKind.FalseKeyword) {
+  if (
+    unwrapped.kind === ts.SyntaxKind.NullKeyword ||
+    unwrapped.kind === ts.SyntaxKind.FalseKeyword
+  ) {
     return true;
   }
 

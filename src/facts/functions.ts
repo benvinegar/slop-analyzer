@@ -57,7 +57,11 @@ function collectLocalNames(node: ts.FunctionLikeDeclarationBase): Set<string> {
       names.add(child.name.text);
     }
 
-    if (ts.isCatchClause(child) && child.variableDeclaration && ts.isIdentifier(child.variableDeclaration.name)) {
+    if (
+      ts.isCatchClause(child) &&
+      child.variableDeclaration &&
+      ts.isIdentifier(child.variableDeclaration.name)
+    ) {
       names.add(child.variableDeclaration.name.text);
     }
 
@@ -84,12 +88,12 @@ function serializeDuplicateFingerprintNode(node: ts.Node, localNames: Set<string
     }
 
     if (
-      ts.isStringLiteralLike(current)
-      || ts.isNumericLiteral(current)
-      || ts.isNoSubstitutionTemplateLiteral(current)
-      || ts.isTemplateHead(current)
-      || ts.isTemplateMiddle(current)
-      || ts.isTemplateTail(current)
+      ts.isStringLiteralLike(current) ||
+      ts.isNumericLiteral(current) ||
+      ts.isNoSubstitutionTemplateLiteral(current) ||
+      ts.isTemplateHead(current) ||
+      ts.isTemplateMiddle(current) ||
+      ts.isTemplateTail(current)
     ) {
       parts.push(`literal:${ts.SyntaxKind[current.kind]}`);
       return;
@@ -125,7 +129,12 @@ function buildDuplicationFingerprint(
   statementCount: number,
   isPassThroughWrapper: boolean,
 ): string | null {
-  if (!node.body || !ts.isBlock(node.body) || isPassThroughWrapper || statementCount < MIN_DUPLICATE_STATEMENT_COUNT) {
+  if (
+    !node.body ||
+    !ts.isBlock(node.body) ||
+    isPassThroughWrapper ||
+    statementCount < MIN_DUPLICATE_STATEMENT_COUNT
+  ) {
     return null;
   }
 
@@ -152,7 +161,9 @@ function collectFunctionSummary(
     .filter((value): value is string => value !== null);
 
   const parameterCount = node.parameters.length;
-  const isAsync = Boolean(node.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.AsyncKeyword));
+  const isAsync = Boolean(
+    node.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.AsyncKeyword),
+  );
   const statements = node.body.statements;
   const statementCount = getNodeStatementCount(node.body);
   let isPassThroughWrapper = false;
@@ -181,7 +192,13 @@ function collectFunctionSummary(
     hasReturnAwaitCall,
     duplicationFingerprint: isTestFile(sourceFile.fileName)
       ? null
-      : buildDuplicationFingerprint(node, isAsync, parameterCount, statementCount, isPassThroughWrapper),
+      : buildDuplicationFingerprint(
+          node,
+          isAsync,
+          parameterCount,
+          statementCount,
+          isPassThroughWrapper,
+        ),
   };
 }
 
@@ -194,7 +211,10 @@ export const functionsFactProvider: FactProvider = {
     return context.scope === "file" && Boolean(context.file);
   },
   run(context) {
-    const sourceFile = context.runtime.store.getFileFact<ts.SourceFile>(context.file!.path, "file.ast");
+    const sourceFile = context.runtime.store.getFileFact<ts.SourceFile>(
+      context.file!.path,
+      "file.ast",
+    );
     if (!sourceFile) {
       return { "file.functionSummaries": [] satisfies FunctionSummary[] };
     }

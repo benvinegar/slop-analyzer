@@ -19,7 +19,8 @@ export const barrelDensityRule: RulePlugin = {
   },
   evaluate(context) {
     const summary =
-      context.runtime.store.getFileFact<ExportSummary>(context.file!.path, "file.exportSummary") ?? null;
+      context.runtime.store.getFileFact<ExportSummary>(context.file!.path, "file.exportSummary") ??
+      null;
 
     // `hasOnlyReExports` keeps the rule focused on pure barrel files instead of
     // legitimate modules that happen to re-export one or two helpers.

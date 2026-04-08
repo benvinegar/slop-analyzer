@@ -155,12 +155,19 @@ function divideOrNull(numerator: number, denominator: number): number | null {
   return denominator > 0 ? numerator / denominator : null;
 }
 
-function buildSummary(files: FileRecord[], directories: DirectoryRecord[], findings: Finding[], store: FactStore): AnalysisSummary {
+function buildSummary(
+  files: FileRecord[],
+  directories: DirectoryRecord[],
+  findings: Finding[],
+  store: FactStore,
+): AnalysisSummary {
   const repoScore = findings.reduce((total, finding) => total + finding.score, 0);
   const physicalLineCount = files.reduce((total, file) => total + file.lineCount, 0);
   const logicalLineCount = files.reduce((total, file) => total + file.logicalLineCount, 0);
   const functionCount = files.reduce(
-    (total, file) => total + (store.getFileFact<FunctionSummary[]>(file.path, "file.functionSummaries")?.length ?? 0),
+    (total, file) =>
+      total +
+      (store.getFileFact<FunctionSummary[]>(file.path, "file.functionSummaries")?.length ?? 0),
     0,
   );
   const kloc = logicalLineCount / 1000;
@@ -209,7 +216,9 @@ export async function analyzeRepository(
   const runtime = createRuntime(rootDir, config, discovery.files, discovery.directories, store);
 
   const fileProviders = registry.getFactProviders().filter((provider) => provider.scope === "file");
-  const directoryProviders = registry.getFactProviders().filter((provider) => provider.scope === "directory");
+  const directoryProviders = registry
+    .getFactProviders()
+    .filter((provider) => provider.scope === "directory");
   const repoProviders = registry.getFactProviders().filter((provider) => provider.scope === "repo");
   const fileRules = registry.getRules().filter((rule) => rule.scope === "file");
   const directoryRules = registry.getRules().filter((rule) => rule.scope === "directory");
@@ -250,7 +259,9 @@ export async function analyzeRepository(
     availableFacts,
   );
 
-  const immediateFileRules = fileRules.filter((rule) => rule.requires.every((factId) => factId.startsWith("file.")));
+  const immediateFileRules = fileRules.filter((rule) =>
+    rule.requires.every((factId) => factId.startsWith("file.")),
+  );
   const delayedFileRules = fileRules.filter((rule) => !immediateFileRules.includes(rule));
 
   const durableFileFacts = new Set<string>(["file.lineCount", "file.logicalLineCount"]);

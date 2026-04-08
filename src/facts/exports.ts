@@ -11,7 +11,10 @@ export const exportsFactProvider: FactProvider = {
     return context.scope === "file" && Boolean(context.file);
   },
   run(context) {
-    const sourceFile = context.runtime.store.getFileFact<ts.SourceFile>(context.file!.path, "file.ast");
+    const sourceFile = context.runtime.store.getFileFact<ts.SourceFile>(
+      context.file!.path,
+      "file.ast",
+    );
     if (!sourceFile) {
       return {
         "file.exportSummary": {
@@ -27,7 +30,9 @@ export const exportsFactProvider: FactProvider = {
       (statement) =>
         ts.isExportDeclaration(statement) &&
         Boolean(statement.moduleSpecifier) &&
-        (!statement.exportClause || ts.isNamedExports(statement.exportClause) || statement.isTypeOnly),
+        (!statement.exportClause ||
+          ts.isNamedExports(statement.exportClause) ||
+          statement.isTypeOnly),
     ).length;
 
     const summary: ExportSummary = {

@@ -7,6 +7,7 @@ This directory contains **recreatable pinned benchmark sets** for `slop-scan`.
 The analyzer is heuristic, so we need benchmark cohorts that can be rerun later against the exact same upstream revisions.
 
 A pinned benchmark set gives us:
+
 - exact repo membership
 - exact commit SHAs
 - saved snapshot results
@@ -18,6 +19,7 @@ A pinned benchmark set gives us:
 - `benchmarks/sets/known-ai-vs-solid-oss.json`
 
 This set compares:
+
 - a cohort of known AI-generated JS/TS repos
 - against older, well-regarded JS/TS OSS repos
 
@@ -54,6 +56,7 @@ bun run benchmark:update
 ## Artifacts
 
 For the current set:
+
 - manifest: `benchmarks/sets/known-ai-vs-solid-oss.json`
 - saved snapshot: `benchmarks/results/known-ai-vs-solid-oss.json`
 - generated report: `reports/known-ai-vs-solid-oss-benchmark.md`

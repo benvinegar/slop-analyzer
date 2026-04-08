@@ -121,7 +121,8 @@ describe("analysis engine", () => {
 
   test("releases heavy per-file facts after each file is processed", async () => {
     const rootDir = await createTempRepo({
-      "src/a.ts": "// placeholder comment\nexport async function a(run: () => Promise<number>) {\n  try {\n    return await run();\n  } catch {\n    return 0;\n  }\n}\n",
+      "src/a.ts":
+        "// placeholder comment\nexport async function a(run: () => Promise<number>) {\n  try {\n    return await run();\n  } catch {\n    return 0;\n  }\n}\n",
       "src/b.ts": "export const b = 2;\n",
       "src/c.ts": "export const c = 3;\n",
     });

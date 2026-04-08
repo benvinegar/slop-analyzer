@@ -1,6 +1,9 @@
 import type { FactProvider } from "./types";
 
-export function orderFactProviders(providers: FactProvider[], initialFacts: string[] = []): FactProvider[] {
+export function orderFactProviders(
+  providers: FactProvider[],
+  initialFacts: string[] = [],
+): FactProvider[] {
   const ordered: FactProvider[] = [];
   const pending = [...providers];
   const availableFacts = new Set(initialFacts);

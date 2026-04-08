@@ -24,7 +24,10 @@ async function createTempRepo(): Promise<string> {
   return rootDir;
 }
 
-function withRuleConfig(ruleId: string, config: { enabled?: boolean; weight?: number }): AnalyzerConfig {
+function withRuleConfig(
+  ruleId: string,
+  config: { enabled?: boolean; weight?: number },
+): AnalyzerConfig {
   return {
     ...DEFAULT_CONFIG,
     rules: {

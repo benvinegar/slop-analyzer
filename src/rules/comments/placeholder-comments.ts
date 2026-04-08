@@ -28,7 +28,8 @@ export const placeholderCommentsRule: RulePlugin = {
   evaluate(context) {
     // Reuse the parsed comment fact instead of reparsing source text inside the rule.
     const comments =
-      context.runtime.store.getFileFact<CommentSummary[]>(context.file!.path, "file.comments") ?? [];
+      context.runtime.store.getFileFact<CommentSummary[]>(context.file!.path, "file.comments") ??
+      [];
     const matches = comments.filter((comment) =>
       PLACEHOLDER_PATTERNS.some((pattern) => pattern.test(comment.text)),
     );

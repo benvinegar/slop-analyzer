@@ -1,7 +1,11 @@
 import { access, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
-import { DEFAULT_BENCHMARK_SET_PATH, loadBenchmarkSet, resolveProjectPath } from "../src/benchmarks/manifest";
+import {
+  DEFAULT_BENCHMARK_SET_PATH,
+  loadBenchmarkSet,
+  resolveProjectPath,
+} from "../src/benchmarks/manifest";
 
 function getOption(argv: string[], flag: string, fallback: string): string {
   const index = argv.indexOf(flag);
@@ -16,7 +20,11 @@ function run(command: string, args: string[], cwd?: string): string {
   });
 
   if (result.status !== 0) {
-    throw new Error([`Command failed: ${command} ${args.join(" ")}`, result.stdout, result.stderr].filter(Boolean).join("\n"));
+    throw new Error(
+      [`Command failed: ${command} ${args.join(" ")}`, result.stdout, result.stderr]
+        .filter(Boolean)
+        .join("\n"),
+    );
   }
 
   return result.stdout.trim();

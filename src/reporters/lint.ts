@@ -18,9 +18,9 @@ function fallbackLocation(finding: Finding): FindingLocation {
 
 function compareLocations(left: FindingLocation, right: FindingLocation): number {
   return (
-    left.path.localeCompare(right.path)
-    || left.line - right.line
-    || (left.column ?? 1) - (right.column ?? 1)
+    left.path.localeCompare(right.path) ||
+    left.line - right.line ||
+    (left.column ?? 1) - (right.column ?? 1)
   );
 }
 
@@ -28,16 +28,14 @@ function uniqueSortedLocations(finding: Finding): FindingLocation[] {
   const locations = finding.locations.length > 0 ? finding.locations : [fallbackLocation(finding)];
   const seen = new Set<string>();
 
-  return [...locations]
-    .sort(compareLocations)
-    .filter((location) => {
-      const key = `${location.path}:${location.line}:${location.column ?? 1}`;
-      if (seen.has(key)) {
-        return false;
-      }
-      seen.add(key);
-      return true;
-    });
+  return [...locations].sort(compareLocations).filter((location) => {
+    const key = `${location.path}:${location.line}:${location.column ?? 1}`;
+    if (seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
+    return true;
+  });
 }
 
 function primaryLocation(finding: Finding): FindingLocation {
@@ -49,9 +47,9 @@ function compareFindings(left: Finding, right: Finding): number {
   const rightPrimary = primaryLocation(right);
 
   return (
-    compareLocations(leftPrimary, rightPrimary)
-    || left.ruleId.localeCompare(right.ruleId)
-    || left.message.localeCompare(right.message)
+    compareLocations(leftPrimary, rightPrimary) ||
+    left.ruleId.localeCompare(right.ruleId) ||
+    left.message.localeCompare(right.message)
   );
 }
 

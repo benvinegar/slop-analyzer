@@ -22,7 +22,10 @@ export const overFragmentationRule: RulePlugin = {
   },
   evaluate(context) {
     const metrics =
-      context.runtime.store.getDirectoryFact<DirectoryMetrics>(context.directory!.path, "directory.metrics") ?? null;
+      context.runtime.store.getDirectoryFact<DirectoryMetrics>(
+        context.directory!.path,
+        "directory.metrics",
+      ) ?? null;
 
     if (!metrics || context.directory!.path === ".") {
       return [];
@@ -31,7 +34,10 @@ export const overFragmentationRule: RulePlugin = {
     const tinyRatio = ratio(metrics.tinyFileCount, metrics.fileCount);
     // "Ceremony" means files that mostly exist to forward/re-export rather than
     // introduce distinct behavior.
-    const ceremonyRatio = ratio(metrics.wrapperFileCount + metrics.barrelFileCount, metrics.fileCount);
+    const ceremonyRatio = ratio(
+      metrics.wrapperFileCount + metrics.barrelFileCount,
+      metrics.fileCount,
+    );
     const testFileRatio = ratio(
       countMatching(context.directory!.filePaths, (filePath) => isTestFile(filePath)),
       metrics.fileCount,

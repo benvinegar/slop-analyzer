@@ -13,25 +13,32 @@ const baseProvider = (input: Partial<FactProvider>): FactProvider => ({
 
 describe("fact provider scheduler", () => {
   test("orders providers by declared fact dependencies", () => {
-    const ordered = orderFactProviders([
-      baseProvider({ id: "derived", requires: ["ast"], provides: ["metrics"] }),
-      baseProvider({ id: "ast", requires: ["file.text"], provides: ["ast"] }),
-    ], ["file.text"]);
+    const ordered = orderFactProviders(
+      [
+        baseProvider({ id: "derived", requires: ["ast"], provides: ["metrics"] }),
+        baseProvider({ id: "ast", requires: ["file.text"], provides: ["ast"] }),
+      ],
+      ["file.text"],
+    );
 
     expect(ordered.map((provider) => provider.id)).toEqual(["ast", "derived"]);
   });
 
   test("throws when dependencies cannot be resolved", () => {
     expect(() =>
-      orderFactProviders([
-        baseProvider({ id: "broken", requires: ["missing"], provides: ["ast"] }),
-      ], ["file.text"]),
+      orderFactProviders(
+        [baseProvider({ id: "broken", requires: ["missing"], provides: ["ast"] })],
+        ["file.text"],
+      ),
     ).toThrow("Unresolved fact provider dependencies");
   });
 
   test("validates rule requirements against available facts", () => {
     expect(() =>
-      validateRuleRequirements([{ id: "rule.ok", requires: ["file.text", "ast"] }], ["file.text", "ast"]),
+      validateRuleRequirements(
+        [{ id: "rule.ok", requires: ["file.text", "ast"] }],
+        ["file.text", "ast"],
+      ),
     ).not.toThrow();
 
     expect(() =>

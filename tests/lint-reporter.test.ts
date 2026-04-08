@@ -92,7 +92,9 @@ describe("lint reporter", () => {
 
     const output = lintReporter.render(result);
 
-    expect(output).toContain("medium  Found 11 duplicated test mock/setup patterns  tests.duplicate-mock-setup");
+    expect(output).toContain(
+      "medium  Found 11 duplicated test mock/setup patterns  tests.duplicate-mock-setup",
+    );
     expect(output).toContain("  at packages/rutabaga/src/alpha.test.ts:6:1");
     expect(output).toContain("  at packages/rutabaga/src/batch.test.ts:3:1");
     expect(output).toContain("  at packages/rutabaga/src/beta.test.ts:7:1");

@@ -1,9 +1,20 @@
 import type { FactProvider } from "../core/types";
-import type { DuplicateTestSetupCluster, DuplicateTestSetupIndex, TestMockSetupSummary } from "./types";
+import type {
+  DuplicateTestSetupCluster,
+  DuplicateTestSetupIndex,
+  TestMockSetupSummary,
+} from "./types";
 import { isTestFile } from "./ts-helpers";
 
 const MIN_CLUSTER_FILE_COUNT = 3;
-const GENERIC_LABELS = new Set(["vi.mock", "jest.mock", "vi.spyOn", "jest.spyOn", "sinon.stub", "sinon.spy"]);
+const GENERIC_LABELS = new Set([
+  "vi.mock",
+  "jest.mock",
+  "vi.spyOn",
+  "jest.spyOn",
+  "sinon.stub",
+  "sinon.spy",
+]);
 
 export const testDuplicationFactProvider: FactProvider = {
   id: "fact.repo.test-duplication",
@@ -18,7 +29,11 @@ export const testDuplicationFactProvider: FactProvider = {
     const fingerprints = new Map<string, DuplicateTestSetupCluster>();
 
     for (const file of files) {
-      const setups = context.runtime.store.getFileFact<TestMockSetupSummary[]>(file.path, "file.testMockSetups") ?? [];
+      const setups =
+        context.runtime.store.getFileFact<TestMockSetupSummary[]>(
+          file.path,
+          "file.testMockSetups",
+        ) ?? [];
       for (const setup of setups) {
         let cluster = fingerprints.get(setup.fingerprint);
         if (!cluster) {
@@ -42,7 +57,9 @@ export const testDuplicationFactProvider: FactProvider = {
       }))
       .filter((cluster) => cluster.fileCount >= MIN_CLUSTER_FILE_COUNT)
       .filter((cluster) => !GENERIC_LABELS.has(cluster.label))
-      .sort((left, right) => right.fileCount - left.fileCount || left.label.localeCompare(right.label));
+      .sort(
+        (left, right) => right.fileCount - left.fileCount || left.label.localeCompare(right.label),
+      );
 
     const byFile: Record<string, DuplicateTestSetupCluster[]> = {};
     for (const cluster of clusters) {

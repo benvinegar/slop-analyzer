@@ -1,7 +1,13 @@
 import * as ts from "typescript";
 import type { FactProvider } from "../core/types";
 import type { TryCatchSummary } from "./types";
-import { getExpressionPath, getLineNumber, isDefaultLiteral, isLoggingCall, walk } from "./ts-helpers";
+import {
+  getExpressionPath,
+  getLineNumber,
+  isDefaultLiteral,
+  isLoggingCall,
+  walk,
+} from "./ts-helpers";
 
 const FILE_SYSTEM_ROOTS = new Set(["fs", "fsp", "fsPromises", "promises"]);
 const FILE_SYSTEM_METHODS = new Set([
@@ -47,7 +53,15 @@ const FILE_SYSTEM_METHODS = new Set([
   "writeFile",
   "writeFileSync",
 ]);
-const PROCESS_METHODS = new Set(["exec", "execFile", "execFileSync", "execSync", "kill", "spawn", "spawnSync"]);
+const PROCESS_METHODS = new Set([
+  "exec",
+  "execFile",
+  "execFileSync",
+  "execSync",
+  "kill",
+  "spawn",
+  "spawnSync",
+]);
 const NETWORK_ROOTS = new Set(["axios", "fetch", "got", "request"]);
 const BROWSER_ROOTS = new Set([
   "browser",
@@ -62,14 +76,24 @@ const BROWSER_ROOTS = new Set([
   "sessionStorage",
   "window",
 ]);
-const BROWSER_METHODS = new Set(["click", "evaluate", "goto", "hover", "reload", "screenshot", "type"]);
+const BROWSER_METHODS = new Set([
+  "click",
+  "evaluate",
+  "goto",
+  "hover",
+  "reload",
+  "screenshot",
+  "type",
+]);
 
 function collectBoundaryCategories(node: ts.TryStatement): string[] {
   const categories = new Set<string>();
 
   walk(node.tryBlock, (child) => {
     if (ts.isCallExpression(child) || ts.isNewExpression(child)) {
-      const path = getExpressionPath(ts.isCallExpression(child) ? child.expression : child.expression ?? child);
+      const path = getExpressionPath(
+        ts.isCallExpression(child) ? child.expression : (child.expression ?? child),
+      );
       if (path.length === 0) {
         return;
       }
@@ -94,8 +118,8 @@ function collectBoundaryCategories(node: ts.TryStatement): string[] {
       }
 
       if (
-        (path.length === 2 && path[0] === "JSON" && path[1] === "parse")
-        || (path.length === 2 && path[0] === "process" && path[1] === "env")
+        (path.length === 2 && path[0] === "JSON" && path[1] === "parse") ||
+        (path.length === 2 && path[0] === "process" && path[1] === "env")
       ) {
         categories.add("config");
       }
@@ -139,7 +163,8 @@ function summarizeTryStatement(node: ts.TryStatement, sourceFile: ts.SourceFile)
     catchStatements.length === 1 &&
     ts.isThrowStatement(catchStatements[0]) &&
     Boolean(catchStatements[0].expression) &&
-    (ts.isNewExpression(catchStatements[0].expression!) || ts.isStringLiteral(catchStatements[0].expression!));
+    (ts.isNewExpression(catchStatements[0].expression!) ||
+      ts.isStringLiteral(catchStatements[0].expression!));
 
   return {
     line: getLineNumber(sourceFile, node.getStart(sourceFile)),
@@ -165,7 +190,10 @@ export const tryCatchFactProvider: FactProvider = {
     return context.scope === "file" && Boolean(context.file);
   },
   run(context) {
-    const sourceFile = context.runtime.store.getFileFact<ts.SourceFile>(context.file!.path, "file.ast");
+    const sourceFile = context.runtime.store.getFileFact<ts.SourceFile>(
+      context.file!.path,
+      "file.ast",
+    );
     if (!sourceFile) {
       return { "file.tryCatchSummaries": [] satisfies TryCatchSummary[] };
     }

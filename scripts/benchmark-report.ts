@@ -1,6 +1,10 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { DEFAULT_BENCHMARK_SET_PATH, loadBenchmarkSet, resolveProjectPath } from "../src/benchmarks/manifest";
+import {
+  DEFAULT_BENCHMARK_SET_PATH,
+  loadBenchmarkSet,
+  resolveProjectPath,
+} from "../src/benchmarks/manifest";
 import { renderBenchmarkReport } from "../src/benchmarks/report";
 import type { BenchmarkSnapshot } from "../src/benchmarks/types";
 

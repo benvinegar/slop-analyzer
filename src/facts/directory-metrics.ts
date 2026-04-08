@@ -24,7 +24,8 @@ export const directoryMetricsFactProvider: FactProvider = {
     for (const filePath of directory.filePaths) {
       const lineCount = context.runtime.store.getFileFact<number>(filePath, "file.lineCount") ?? 0;
       const functions =
-        context.runtime.store.getFileFact<FunctionSummary[]>(filePath, "file.functionSummaries") ?? [];
+        context.runtime.store.getFileFact<FunctionSummary[]>(filePath, "file.functionSummaries") ??
+        [];
       const exportSummary =
         context.runtime.store.getFileFact<ExportSummary>(filePath, "file.exportSummary") ?? null;
 

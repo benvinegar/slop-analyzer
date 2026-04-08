@@ -2,7 +2,11 @@ import { access, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import packageJson from "../package.json";
-import { DEFAULT_BENCHMARK_SET_PATH, loadBenchmarkSet, resolveProjectPath } from "../src/benchmarks/manifest";
+import {
+  DEFAULT_BENCHMARK_SET_PATH,
+  loadBenchmarkSet,
+  resolveProjectPath,
+} from "../src/benchmarks/manifest";
 import { createBenchmarkSnapshot } from "../src/benchmarks/snapshot";
 import { DEFAULT_CONFIG } from "../src/config";
 import { analyzeRepository } from "../src/core/engine";

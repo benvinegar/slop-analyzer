@@ -19,7 +19,9 @@ export const duplicateMockSetupRule: RulePlugin = {
     return context.scope === "file" && Boolean(context.file) && isTestFile(context.file!.path);
   },
   evaluate(context) {
-    const duplication = context.runtime.store.getRepoFact<DuplicateTestSetupIndex>("repo.testMockDuplication");
+    const duplication = context.runtime.store.getRepoFact<DuplicateTestSetupIndex>(
+      "repo.testMockDuplication",
+    );
     const clusters = duplication?.byFile[context.file!.path] ?? [];
 
     if (clusters.length === 0) {
@@ -30,7 +32,8 @@ export const duplicateMockSetupRule: RulePlugin = {
     // multiple occurrences. Deduplicate by fingerprint so the rule message talks
     // about distinct repeated patterns, not raw occurrence count.
     const uniqueClusters = clusters.filter(
-      (cluster, index) => clusters.findIndex((candidate) => candidate.fingerprint === cluster.fingerprint) === index,
+      (cluster, index) =>
+        clusters.findIndex((candidate) => candidate.fingerprint === cluster.fingerprint) === index,
     );
 
     return [
@@ -50,9 +53,15 @@ export const duplicateMockSetupRule: RulePlugin = {
         }),
         // The second file establishes duplication; each additional file adds a
         // smaller increment instead of linearly exploding the score.
-        score: Math.min(5, uniqueClusters.reduce((total, cluster) => total + 1 + (cluster.fileCount - 2) * 0.5, 0)),
+        score: Math.min(
+          5,
+          uniqueClusters.reduce((total, cluster) => total + 1 + (cluster.fileCount - 2) * 0.5, 0),
+        ),
         locations: uniqueClusters.flatMap((cluster) =>
-          cluster.occurrences.map((occurrence) => ({ path: occurrence.path, line: occurrence.line })),
+          cluster.occurrences.map((occurrence) => ({
+            path: occurrence.path,
+            line: occurrence.line,
+          })),
         ),
       },
     ];

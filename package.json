@@ -1,8 +1,22 @@
 {
   "name": "slop-scan",
   "version": "0.1.3",
-  "type": "module",
   "description": "Deterministic CLI for finding AI-associated slop patterns in JavaScript and TypeScript repositories.",
+  "keywords": [
+    "ai",
+    "cli",
+    "code-quality",
+    "static-analysis",
+    "typescript"
+  ],
+  "homepage": "https://github.com/benvinegar/slop-scan#readme",
+  "bugs": {
+    "url": "https://github.com/benvinegar/slop-scan/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benvinegar/slop-scan.git"
+  },
   "bin": {
     "slop-scan": "bin/slop-scan.js"
   },
@@ -11,28 +25,16 @@
     "dist",
     "README.md"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/benvinegar/slop-scan.git"
-  },
-  "homepage": "https://github.com/benvinegar/slop-scan#readme",
-  "bugs": {
-    "url": "https://github.com/benvinegar/slop-scan/issues"
-  },
-  "keywords": [
-    "ai",
-    "code-quality",
-    "cli",
-    "static-analysis",
-    "typescript"
-  ],
-  "engines": {
-    "node": ">=18"
-  },
+  "type": "module",
   "scripts": {
     "build": "bun run scripts/build-cli.ts",
     "scan": "bun run src/cli.ts scan .",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "lint": "oxlint . --deny-warnings",
+    "lint:fix": "oxlint . --fix",
     "test": "bun test",
+    "prepare": "husky",
     "prepack": "bun run build",
     "benchmark:fetch": "bun run scripts/benchmark-fetch.ts",
     "benchmark:scan": "bun run scripts/benchmark-scan.ts",
@@ -42,5 +44,13 @@
   "dependencies": {
     "globby": "^16.2.0",
     "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "oxfmt": "^0.44.0",
+    "oxlint": "^1.59.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

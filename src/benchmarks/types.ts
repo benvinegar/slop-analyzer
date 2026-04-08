@@ -1,4 +1,10 @@
-import type { AnalysisResult, AnalysisSummary, DirectoryScore, FileScore, NormalizedMetrics } from "../core/types";
+import type {
+  AnalysisResult,
+  AnalysisSummary,
+  DirectoryScore,
+  FileScore,
+  NormalizedMetrics,
+} from "../core/types";
 
 export type BenchmarkCohort = "explicit-ai" | "mature-oss";
 

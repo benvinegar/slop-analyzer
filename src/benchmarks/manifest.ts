@@ -7,7 +7,9 @@ export const DEFAULT_BENCHMARK_SET_PATH = path.resolve(
   "benchmarks/sets/known-ai-vs-solid-oss.json",
 );
 
-export async function loadBenchmarkSet(manifestPath = DEFAULT_BENCHMARK_SET_PATH): Promise<BenchmarkSet> {
+export async function loadBenchmarkSet(
+  manifestPath = DEFAULT_BENCHMARK_SET_PATH,
+): Promise<BenchmarkSet> {
   const raw = await readFile(manifestPath, "utf8");
   return JSON.parse(raw) as BenchmarkSet;
 }
