@@ -50,6 +50,7 @@ This mix covers small, medium, large, and very large JS/TS repositories so we do
 - Baseline recorded at `total_ms=15205.371` over agent-ci, umami, astro, and openclaw.
 - **Kept**: removed an extra `ts.createSourceFile()` from logical LOC counting and replaced `text.split(/\r?\n/)` with a zero-allocation physical line counter. This dropped the workload to `total_ms=10330.611` with unchanged `total_findings=3715` and `total_score=12412.12`.
 - **Kept**: rewrote test mock setup extraction from repeated per-statement subtree rescans into a single AST traversal that accumulates matched mock paths for active statement ancestors. This further dropped the workload to `total_ms=9692.326` with unchanged `total_findings=3715` and `total_score=12412.12`.
+- **Kept**: skipped `hasAwait` subtree scans for non-async functions and skipped duplicate-signature fingerprint generation for test files, since those fingerprints are never consumed. This dropped the workload again to `total_ms=9074.674` with unchanged `total_findings=3715` and `total_score=12412.12`.
 - **Discarded**: precompiling ignore regexes and swapping `Array.find()` for a manual language loop in discovery made the workload slower on the benchmark mix.
 - **Crashed / not kept**: disabling TypeScript parent links looks promising for AST parse cost, but several helpers still assume parent-backed APIs. Revisit only with a more comprehensive cleanup of those assumptions.
 - Initial likely hotspots still worth investigating:
