@@ -30,8 +30,10 @@
 ## Validation
 
 - `bun run format:check`
-- `bun run lint`
+- `bun run lint` (includes the last published `slop-scan` self-scan regression check)
 - `bun test`
 - `bun run src/cli.ts scan <path> [--json|--lint]`
+- The committed root `slop-scan.config.json` exists mainly for repo self-scan/local validation; it excludes benchmark cache and intentionally slop-heavy fixtures.
 - If rule behavior changes, update focused tests and `tests/fixtures-regression.test.ts`.
+- If stable self-scan regressions are intentional, refresh `tests/fixtures/self-scan-stable-baseline.json` with `bun run lint:self:update`.
 - If benchmark-facing behavior changes materially, rerun `bun run benchmark:update` intentionally.

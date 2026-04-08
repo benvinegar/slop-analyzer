@@ -12,7 +12,8 @@ describe("project scaffold", () => {
   });
 
   test("loadConfig returns defaults when config file is absent", async () => {
-    const config = await loadConfig(process.cwd());
+    const fixtureRoot = path.join(process.cwd(), "tests", "fixtures", "repos", "clean");
+    const config = await loadConfig(fixtureRoot);
     expect(config).toEqual(DEFAULT_CONFIG);
   });
 

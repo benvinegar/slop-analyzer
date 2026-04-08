@@ -208,6 +208,8 @@ Supported today:
 - `rules.<id>.enabled`
 - `rules.<id>.weight`
 
+This repo also commits a root [`slop-scan.config.json`](slop-scan.config.json) for self-scans and local development. It keeps the scan focused on the tool itself by excluding heavyweight benchmark checkouts and intentionally slop-heavy fixture repos.
+
 ## How it works
 
 `slop-scan` is built as a pluggable engine:
@@ -229,7 +231,7 @@ That keeps the analyzer deterministic and extensible without turning it into one
 
 Issues and pull requests are welcome.
 
-Local validation:
+### Local validation
 
 ```bash
 bun run format:check
@@ -237,7 +239,36 @@ bun run lint
 bun test
 ```
 
-A Husky pre-commit hook runs the format and lint checks automatically on commit.
+### Stable self-scan
+
+`bun run lint` includes a stable self-scan.
+
+It runs the last published `slop-scan` release against this repo using the committed root config in [`slop-scan.config.json`](slop-scan.config.json), then compares the result to [`tests/fixtures/self-scan-stable-baseline.json`](tests/fixtures/self-scan-stable-baseline.json).
+
+The check currently fails only when the stable release reports either:
+
+- a higher finding count; or
+- a higher repo score.
+
+Useful commands:
+
+```bash
+bun run lint:self
+bun run lint:self:update
+```
+
+Use `bun run lint:self:update` only when you intentionally accept the new stable self-scan baseline.
+
+### Pre-commit hook
+
+A Husky pre-commit hook runs:
+
+```bash
+bun run format:check
+bun run lint
+```
+
+### Heuristic changes
 
 If you change rule behavior materially, also rerun:
 

@@ -12,6 +12,7 @@
         "husky": "^9.1.7",
         "oxfmt": "^0.44.0",
         "oxlint": "^1.59.0",
+        "slop-scan-stable": "npm:slop-scan@0.1.2",
       },
     },
   },
@@ -141,6 +142,8 @@
     "run-parallel": ["run-parallel@1.2.0", "", { "dependencies": { "queue-microtask": "^1.2.2" } }, "sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA=="],
 
     "slash": ["slash@5.1.0", "", {}, "sha512-ZA6oR3T/pEyuqwMgAKT0/hAv8oAXckzbkmR0UkUosQ+Mc4RxGoJkRmwHgHufaenlyAgE1Mxgpdcrf75y6XcnDg=="],
+
+    "slop-scan-stable": ["slop-scan@0.1.2", "", { "dependencies": { "typescript": "^5.8.3" }, "bin": { "slop-scan": "bin/slop-scan.js" } }, "sha512-fdqTkE41o1ymeB0EGM3MCNgv99dXFlhWo7o4YyYHFDSNR6HYhJew6PBeNsjwRNNsL+cQdEyI519obnTFLt4nDg=="],
 
     "tinypool": ["tinypool@2.1.0", "", {}, "sha512-Pugqs6M0m7Lv1I7FtxN4aoyToKg1C4tu+/381vH35y8oENM/Ai7f7C4StcoK4/+BSw9ebcS8jRiVrORFKCALLw=="],
 
