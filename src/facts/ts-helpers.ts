@@ -103,10 +103,13 @@ export function isTestFile(filePath: string): boolean {
 }
 
 export function fingerprintNodeShape(node: ts.Node, maxDepth = 4): string {
-  function visit(current: ts.Node, depth: number): string {
+  const parts: string[] = [];
+
+  function visit(current: ts.Node, depth: number): void {
     const label = ts.SyntaxKind[current.kind];
     if (depth >= maxDepth) {
-      return label;
+      parts.push(label);
+      return;
     }
 
     const children = current.getChildren().filter(
@@ -114,13 +117,22 @@ export function fingerprintNodeShape(node: ts.Node, maxDepth = 4): string {
     );
 
     if (children.length === 0) {
-      return label;
+      parts.push(label);
+      return;
     }
 
-    return `${label}(${children.map((child) => visit(child, depth + 1)).join(",")})`;
+    parts.push(label, "(");
+    for (let index = 0; index < children.length; index += 1) {
+      if (index > 0) {
+        parts.push(",");
+      }
+      visit(children[index]!, depth + 1);
+    }
+    parts.push(")");
   }
 
-  return visit(node, 0);
+  visit(node, 0);
+  return parts.join("");
 }
 
 export function getNodeStatementCount(node: ts.Block | undefined): number {
