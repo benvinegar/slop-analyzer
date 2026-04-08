@@ -1,0 +1,1 @@
+- Plumb `sourceFile` explicitly through every AST helper that currently falls back to parent-backed APIs (`getFunctionName`, `isLoggingCall`, `fingerprintNodeShape`, and anything else discovered along the way) so `astFactProvider` can create source files with `setParentNodes=false`. AST parse time is still the dominant hotspot, so this is a promising larger follow-up.

@@ -76,7 +76,6 @@ function collectBoundaryCategories(node: ts.TryStatement): string[] {
 
       const [root] = path;
       const last = path.at(-1) ?? "";
-      const joinedPath = path.join(".");
 
       if (FILE_SYSTEM_ROOTS.has(root) || FILE_SYSTEM_METHODS.has(last)) {
         categories.add("filesystem");
@@ -94,15 +93,17 @@ function collectBoundaryCategories(node: ts.TryStatement): string[] {
         categories.add("browser");
       }
 
-      if (joinedPath === "JSON.parse" || joinedPath === "process.env") {
+      if (
+        (path.length === 2 && path[0] === "JSON" && path[1] === "parse")
+        || (path.length === 2 && path[0] === "process" && path[1] === "env")
+      ) {
         categories.add("config");
       }
     }
 
     if (ts.isPropertyAccessExpression(child)) {
       const path = getExpressionPath(child);
-      const joinedPath = path.join(".");
-      if (joinedPath === "process.env") {
+      if (path.length === 2 && path[0] === "process" && path[1] === "env") {
         categories.add("config");
       }
     }
