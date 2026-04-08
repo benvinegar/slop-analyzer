@@ -9,6 +9,7 @@ import {
   getLineNumber,
   getNodeStatementCount,
   hasAwaitExpression,
+  isTestFile,
   walk,
 } from "./ts-helpers";
 
@@ -153,18 +154,14 @@ function collectFunctionSummary(
     line: getLineNumber(sourceFile, node.getStart(sourceFile)),
     parameterCount,
     isAsync,
-    hasAwait: hasAwaitExpression(node.body),
+    hasAwait: isAsync ? hasAwaitExpression(node.body) : false,
     statementCount,
     isPassThroughWrapper,
     passThroughTarget,
     hasReturnAwaitCall,
-    duplicationFingerprint: buildDuplicationFingerprint(
-      node,
-      isAsync,
-      parameterCount,
-      statementCount,
-      isPassThroughWrapper,
-    ),
+    duplicationFingerprint: isTestFile(sourceFile.fileName)
+      ? null
+      : buildDuplicationFingerprint(node, isAsync, parameterCount, statementCount, isPassThroughWrapper),
   };
 }
 
