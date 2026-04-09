@@ -18,6 +18,7 @@ const MIN_DUPLICATE_NODE_COUNT = 16;
 const MAX_FUNCTION_SUMMARY_CACHE_ENTRIES = 500;
 const functionSummaryCache = new Map<string, { text: string; functions: FunctionSummary[] }>();
 
+/** Stores function summaries for unchanged file text. */
 function cacheFunctionSummaries(
   filePath: string,
   text: string,

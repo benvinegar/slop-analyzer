@@ -30,6 +30,7 @@ function normalizePath(filePath: string): string {
   return filePath.split(path.sep).join("/");
 }
 
+/** Builds the cache key for a discovery run. */
 function discoveryCacheKey(
   rootDir: string,
   config: AnalyzerConfig,
@@ -42,6 +43,7 @@ function discoveryCacheKey(
   ].join("\u0001");
 }
 
+/** Reads an optional path mtime without throwing for misses. */
 async function statMtimeNs(targetPath: string): Promise<bigint | null> {
   return stat(targetPath, { bigint: true }).then(
     (stats) => stats.mtimeNs,
@@ -49,10 +51,12 @@ async function statMtimeNs(targetPath: string): Promise<bigint | null> {
   );
 }
 
+/** Reads an optional path mtime on the cache-hit fast path. */
 function statMtimeNsSync(targetPath: string): bigint | null {
   return statSync(targetPath, { bigint: true, throwIfNoEntry: false })?.mtimeNs ?? null;
 }
 
+/** Checks whether discovery needs to consult a root .gitignore. */
 async function hasRootGitignore(rootDir: string): Promise<boolean> {
   return access(path.join(rootDir, ".gitignore")).then(
     () => true,
@@ -60,6 +64,7 @@ async function hasRootGitignore(rootDir: string): Promise<boolean> {
   );
 }
 
+/** Checks whether cached discovery results are still valid. */
 async function canReuseDiscoveryCache(
   rootDir: string,
   cached: CachedDiscoveryResult,
@@ -76,6 +81,7 @@ async function canReuseDiscoveryCache(
   );
 }
 
+/** Returns fresh discovery records from cached data. */
 function cloneDiscovery(cached: CachedDiscoveryResult): {
   files: FileRecord[];
   directories: DirectoryRecord[];
@@ -96,6 +102,7 @@ function cloneDiscovery(cached: CachedDiscoveryResult): {
   };
 }
 
+/** Finds analyzable files and reuses cached results when possible. */
 export async function discoverSourceFiles(
   rootDir: string,
   config: AnalyzerConfig,

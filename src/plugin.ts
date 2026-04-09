@@ -27,10 +27,12 @@ export interface ConfigFile extends Partial<AnalyzerConfig> {
   plugins?: Record<string, PluginReference>;
 }
 
+/** Preserves type inference for plugin definitions. */
 export function definePlugin<T extends SlopScanPlugin>(plugin: T): T {
   return plugin;
 }
 
+/** Preserves type inference for config definitions. */
 export function defineConfig<T extends ConfigFile>(config: T): T {
   return config;
 }

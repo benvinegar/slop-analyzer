@@ -5,6 +5,7 @@ import type { ExportSummary } from "./types";
 const MAX_EXPORT_SUMMARY_CACHE_ENTRIES = 500;
 const exportSummaryCache = new Map<string, { text: string; summary: ExportSummary }>();
 
+/** Stores export summaries for unchanged file text. */
 function cacheExportSummary(filePath: string, text: string, summary: ExportSummary): void {
   if (
     !exportSummaryCache.has(filePath) &&

@@ -40,6 +40,7 @@ export class Registry {
     this.reporters.set(plugin.id, plugin);
   }
 
+  /** Validates and registers rules from an external plugin. */
   registerPlugin(namespace: string, plugin: SlopScanPlugin): void {
     if (!plugin.meta || typeof plugin.meta.name !== "string" || plugin.meta.name.length === 0) {
       throw new Error(`Plugin "${namespace}" must define meta.name.`);

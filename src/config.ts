@@ -77,15 +77,18 @@ const configModuleCache = new Map<string, { mtimeNs: bigint; moduleNamespace: un
 const pluginModuleCache = new Map<string, { mtimeMs: number; moduleNamespace: unknown }>();
 const configPathCache = new Map<string, { directoryMtimeMs: number; configPath: string | null }>();
 
+/** Creates unique suffixes for temp module loads. */
 function nextModuleLoadToken(): number {
   moduleLoadCounter += 1;
   return moduleLoadCounter;
 }
 
+/** Checks whether a value can be treated like a config object. */
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+/** Deep-clones nested rule options. */
 function cloneOptionValue<T>(value: T): T {
   if (Array.isArray(value)) {
     const cloned: unknown[] = [];
@@ -107,6 +110,7 @@ function cloneOptionValue<T>(value: T): T {
   return value;
 }
 
+/** Clones a single rule config. */
 function cloneRuleConfig(config: RuleConfig): RuleConfig {
   return {
     enabled: config.enabled,
@@ -115,6 +119,7 @@ function cloneRuleConfig(config: RuleConfig): RuleConfig {
   };
 }
 
+/** Clones a map of rule configs. */
 function cloneRuleConfigMap(rules: Record<string, RuleConfig>): Record<string, RuleConfig> {
   const ruleIds = Object.keys(rules);
   if (ruleIds.length === 0) {
@@ -128,6 +133,7 @@ function cloneRuleConfigMap(rules: Record<string, RuleConfig>): Record<string, R
   return cloned;
 }
 
+/** Clones a resolved analyzer config. */
 function cloneConfig(config: AnalyzerConfig): AnalyzerConfig {
   const overrides: ConfigOverride[] = [];
   overrides.length = config.overrides.length;
@@ -147,6 +153,7 @@ function cloneConfig(config: AnalyzerConfig): AnalyzerConfig {
   };
 }
 
+/** Merges rule overrides onto a cloned rule map. */
 function mergeRuleConfigs(
   base: Record<string, RuleConfig>,
   next: Record<string, RuleConfig>,
@@ -175,6 +182,7 @@ function mergeRuleConfigs(
   return merged;
 }
 
+/** Merges defaults, presets, and user config into one detached object. */
 function mergeAnalyzerConfig(
   base: AnalyzerConfig,
   next: Partial<AnalyzerConfig>,
@@ -214,6 +222,7 @@ function mergeAnalyzerConfig(
   };
 }
 
+/** Applies top-level config fields after preset resolution. */
 function toResolvedAnalyzerConfig(
   configFile: ConfigFile,
   extendedConfig: AnalyzerConfig,
@@ -230,6 +239,7 @@ function toResolvedAnalyzerConfig(
   });
 }
 
+/** Finds the active config file for a repo root. */
 async function findConfigPath(rootDir: string): Promise<string | null> {
   const directoryStat = await stat(rootDir).catch(() => null);
   if (!directoryStat) {
@@ -256,6 +266,7 @@ async function findConfigPath(rootDir: string): Promise<string | null> {
   return null;
 }
 
+/** Accepts either default exports or plain object exports. */
 function unwrapModuleDefault<T>(moduleNamespace: T): T {
   if (isPlainObject(moduleNamespace) && "default" in moduleNamespace) {
     return moduleNamespace.default as T;
@@ -264,6 +275,7 @@ function unwrapModuleDefault<T>(moduleNamespace: T): T {
   return moduleNamespace;
 }
 
+/** Reuses a module resolver for one config directory. */
 function createModuleResolver(baseDir: string) {
   const cached = moduleResolverCache.get(baseDir);
   if (cached) {
@@ -275,11 +287,13 @@ function createModuleResolver(baseDir: string) {
   return resolver;
 }
 
+/** Resolves a string plugin reference from a config directory. */
 function resolveModulePath(specifier: string, baseDir: string): string {
   const resolver = createModuleResolver(baseDir);
   return resolver.resolve(specifier);
 }
 
+/** Loads a TypeScript module through a temporary transpiled file. */
 async function importTranspiledTypeScriptModule(modulePath: string): Promise<unknown> {
   const source = await readFile(modulePath, "utf8");
   const transpiled = transpileModule(source, {
@@ -305,6 +319,7 @@ async function importTranspiledTypeScriptModule(modulePath: string): Promise<unk
   }
 }
 
+/** Imports a module with cache busting so edits are picked up. */
 async function importResolvedModule(modulePath: string): Promise<unknown> {
   const extension = path.extname(modulePath).toLowerCase();
   const moduleUrl = `${pathToFileURL(modulePath).href}?cacheBust=${nextModuleLoadToken()}`;
@@ -320,6 +335,7 @@ async function importResolvedModule(modulePath: string): Promise<unknown> {
   return import(moduleUrl);
 }
 
+/** Validates that a loaded config export is object-shaped. */
 function normalizeConfigFile(rawConfig: unknown): ConfigFile {
   const config = unwrapModuleDefault(rawConfig);
 
@@ -330,6 +346,7 @@ function normalizeConfigFile(rawConfig: unknown): ConfigFile {
   return config as ConfigFile;
 }
 
+/** Validates that a loaded plugin export is object-shaped. */
 function normalizePlugin(rawPlugin: unknown): SlopScanPlugin {
   const plugin = unwrapModuleDefault(rawPlugin);
 
@@ -340,6 +357,7 @@ function normalizePlugin(rawPlugin: unknown): SlopScanPlugin {
   return plugin as SlopScanPlugin;
 }
 
+/** Checks plugin metadata and rule ids before use. */
 function assertValidPlugin(namespace: string, plugin: SlopScanPlugin, source: string): void {
   if (!plugin.meta || typeof plugin.meta.name !== "string" || plugin.meta.name.length === 0) {
     throw new Error(`Plugin "${namespace}" from ${source} must define meta.name.`);
@@ -366,6 +384,7 @@ function assertValidPlugin(namespace: string, plugin: SlopScanPlugin, source: st
   }
 }
 
+/** Reuses an unchanged config module by mtime. */
 async function importCachedConfigModule(modulePath: string): Promise<unknown> {
   const nextMtimeNs = (await stat(modulePath, { bigint: true })).mtimeNs;
   const cached = configModuleCache.get(modulePath);
@@ -383,6 +402,7 @@ async function importCachedConfigModule(modulePath: string): Promise<unknown> {
   return moduleNamespace;
 }
 
+/** Reuses an unchanged plugin module by mtime. */
 async function importCachedPluginModule(modulePath: string): Promise<unknown> {
   const nextMtimeMs = (await stat(modulePath)).mtimeMs;
   const cached = pluginModuleCache.get(modulePath);
@@ -396,6 +416,7 @@ async function importCachedPluginModule(modulePath: string): Promise<unknown> {
   return moduleNamespace;
 }
 
+/** Normalizes one plugin reference into a loaded plugin record. */
 async function loadPluginReference(
   namespace: string,
   reference: PluginReference,
@@ -412,6 +433,7 @@ async function loadPluginReference(
   return { namespace, plugin, source: reference };
 }
 
+/** Loads and validates the configured plugins. */
 async function loadPlugins(
   pluginReferences: Record<string, PluginReference> | undefined,
   baseDir: string,
@@ -427,6 +449,7 @@ async function loadPlugins(
   );
 }
 
+/** Applies plugin preset configs from extends entries. */
 function resolvePluginExtends(
   extendsRefs: string[] | undefined,
   plugins: LoadedPlugin[],
@@ -467,6 +490,7 @@ function resolvePluginExtends(
   return resolved;
 }
 
+/** Loads a config file in JSON or module form. */
 async function loadRawConfigFile(configPath: string): Promise<ConfigFile> {
   if (configPath.endsWith(".json")) {
     const raw = await readFile(configPath, "utf8");
@@ -481,6 +505,7 @@ const DEFAULT_RESOLVED_RULE_CONFIG: ResolvedRuleConfig = {
   weight: 1,
 };
 
+/** Expands sparse rule config into the runtime shape. */
 export function resolveRuleConfigDefaults(ruleConfig?: RuleConfig): ResolvedRuleConfig {
   if (!ruleConfig) {
     return DEFAULT_RESOLVED_RULE_CONFIG;
@@ -507,6 +532,7 @@ export function resolveRuleConfigDefaults(ruleConfig?: RuleConfig): ResolvedRule
   };
 }
 
+/** Loads the resolved config and plugin list for a scan. */
 export async function loadConfigFile(rootDir: string): Promise<LoadedConfigFile> {
   const configPath = await findConfigPath(rootDir);
 
@@ -536,6 +562,7 @@ export async function loadConfigFile(rootDir: string): Promise<LoadedConfigFile>
   };
 }
 
+/** Loads only the resolved analyzer config. */
 export async function loadConfig(rootDir: string): Promise<AnalyzerConfig> {
   return (await loadConfigFile(rootDir)).config;
 }

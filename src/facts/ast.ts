@@ -5,6 +5,7 @@ import { getScriptKind } from "./ts-helpers";
 const MAX_AST_CACHE_ENTRIES = 500;
 const astCache = new Map<string, { text: string; sourceFile: ts.SourceFile }>();
 
+/** Stores parsed ASTs for unchanged file text. */
 function cacheSourceFile(filePath: string, text: string, sourceFile: ts.SourceFile): void {
   if (!astCache.has(filePath) && astCache.size >= MAX_AST_CACHE_ENTRIES) {
     const oldestKey = astCache.keys().next().value;

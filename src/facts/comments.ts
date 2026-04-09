@@ -7,6 +7,7 @@ const COMMENT_PATTERN = /\/\/.*|\/\*[\s\S]*?\*\//g;
 const MAX_COMMENT_CACHE_ENTRIES = 500;
 const commentCache = new Map<string, { text: string; comments: CommentSummary[] }>();
 
+/** Stores comment summaries for unchanged file text. */
 function cacheComments(filePath: string, text: string, comments: CommentSummary[]): void {
   if (!commentCache.has(filePath) && commentCache.size >= MAX_COMMENT_CACHE_ENTRIES) {
     const oldestKey = commentCache.keys().next().value;

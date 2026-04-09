@@ -186,6 +186,7 @@ function isPromiseLike<T>(value: T | Promise<T>): value is Promise<T> {
   return typeof value === "object" && value !== null && "then" in value;
 }
 
+/** Stores reusable file text and line counts. */
 function cacheFilePayload(absolutePath: string, payload: CachedFilePayload): void {
   if (
     !filePayloadCache.has(absolutePath) &&
@@ -200,6 +201,7 @@ function cacheFilePayload(absolutePath: string, payload: CachedFilePayload): voi
   filePayloadCache.set(absolutePath, payload);
 }
 
+/** Loads cached file text and line counts when possible. */
 function loadFilePayload(file: FileRecord): CachedFilePayload {
   const stats = statSync(file.absolutePath, { bigint: true });
   const cached = filePayloadCache.get(file.absolutePath);
