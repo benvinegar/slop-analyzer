@@ -4,12 +4,14 @@ import { DEFAULT_CONFIG, loadConfig } from "../src/config";
 import { formatHelp, run } from "../src/cli";
 
 describe("project scaffold", () => {
-  test("help text mentions scan command", () => {
+  test("help text stays focused on usage", () => {
     expect(formatHelp()).toContain("slop-scan");
     expect(formatHelp()).toContain("scan");
     expect(formatHelp()).toContain("--lint");
-    expect(formatHelp()).toContain("pluggable registry");
     expect(formatHelp()).toContain("--ignore");
+    expect(formatHelp()).toContain("--help");
+    expect(formatHelp()).not.toContain("Development:");
+    expect(formatHelp()).not.toContain("Implemented today:");
   });
 
   test("loadConfig returns defaults when config file is absent", async () => {
