@@ -1,4 +1,4 @@
-import type { TryCatchSummary } from "../../facts/types";
+import type { TryCatchSummary } from "../facts/types";
 
 export function isValidTryCatchTarget(summary: TryCatchSummary): boolean {
   return summary.hasCatchClause && !summary.isFilesystemExistenceProbe;

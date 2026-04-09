@@ -2,24 +2,24 @@
   "scannerVersion": "0.1.2",
   "summary": {
     "fileCount": 59,
-    "directoryCount": 16,
-    "findingCount": 5,
-    "repoScore": 8.021428571428572,
+    "directoryCount": 12,
+    "findingCount": 6,
+    "repoScore": 11.116666666666667,
     "physicalLineCount": 5975,
     "logicalLineCount": 4238,
     "functionCount": 192,
     "normalized": {
-      "scorePerFile": 0.13595641646489107,
-      "scorePerKloc": 1.892739162677813,
-      "scorePerFunction": 0.041778273809523814,
-      "findingsPerFile": 0.0847457627118644,
-      "findingsPerKloc": 1.1798017932987257,
-      "findingsPerFunction": 0.026041666666666668
+      "scorePerFile": 0.18841807909604522,
+      "scorePerKloc": 2.6230926537675003,
+      "scorePerFunction": 0.05789930555555556,
+      "findingsPerFile": 0.1016949152542373,
+      "findingsPerKloc": 1.4157621519584709,
+      "findingsPerFunction": 0.03125
     }
   },
   "ruleCounts": {
     "comments.placeholder-comments": 2,
     "defensive.needless-try-catch": 2,
-    "structure.directory-fanout-hotspot": 1
+    "structure.directory-fanout-hotspot": 2
   }
 }

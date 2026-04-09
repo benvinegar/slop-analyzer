@@ -1,5 +1,5 @@
-import type { RulePlugin } from "../../core/types";
-import type { ExportSummary } from "../../facts/types";
+import type { RulePlugin } from "../core/types";
+import type { ExportSummary } from "../facts/types";
 
 /**
  * Flags files that are mostly re-export barrels.

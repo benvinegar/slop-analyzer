@@ -1,6 +1,6 @@
-import type { RulePlugin } from "../../core/types";
-import type { DuplicateTestSetupIndex } from "../../facts/types";
-import { isTestFile } from "../../facts/ts-helpers";
+import type { RulePlugin } from "../core/types";
+import type { DuplicateTestSetupIndex } from "../facts/types";
+import { isTestFile } from "../facts/ts-helpers";
 
 /**
  * Flags repeated test setup/mock shapes that appear across multiple test files.

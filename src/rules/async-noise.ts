@@ -1,6 +1,6 @@
-import type { RulePlugin } from "../../core/types";
-import type { FunctionSummary } from "../../facts/types";
-import { BOUNDARY_WRAPPER_TARGET_PREFIXES } from "../helpers";
+import type { RulePlugin } from "../core/types";
+import type { FunctionSummary } from "../facts/types";
+import { BOUNDARY_WRAPPER_TARGET_PREFIXES } from "./helpers";
 
 /**
  * Flags async-related ceremony that adds little value:

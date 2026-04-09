@@ -1,5 +1,5 @@
-import type { RulePlugin } from "../../core/types";
-import type { TryCatchSummary } from "../../facts/types";
+import type { RulePlugin } from "../core/types";
+import type { TryCatchSummary } from "../facts/types";
 import {
   formatTryCatchBoundary,
   isValidTryCatchTarget,

@@ -1,5 +1,5 @@
-import type { RulePlugin } from "../../core/types";
-import type { CommentSummary } from "../../facts/types";
+import type { RulePlugin } from "../core/types";
+import type { CommentSummary } from "../facts/types";
 
 /**
  * Flags filler comments that gesture at future work without explaining current

@@ -1,6 +1,6 @@
-import type { RulePlugin } from "../../core/types";
-import type { DuplicateFunctionIndex } from "../../facts/types";
-import { isTestFile } from "../../facts/ts-helpers";
+import type { RulePlugin } from "../core/types";
+import type { DuplicateFunctionIndex } from "../facts/types";
+import { isTestFile } from "../facts/ts-helpers";
 
 /**
  * Flags non-test files whose function bodies match the same normalized helper

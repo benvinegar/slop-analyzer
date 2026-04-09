@@ -1,8 +1,8 @@
 import path from "node:path";
-import type { RulePlugin } from "../../core/types";
-import { isTestFile } from "../../facts/ts-helpers";
-import type { DirectoryMetrics } from "../../facts/types";
-import { average, countMatching, isAssetLikeDirectoryPath, median, ratio } from "../helpers";
+import type { RulePlugin } from "../core/types";
+import { isTestFile } from "../facts/ts-helpers";
+import type { DirectoryMetrics } from "../facts/types";
+import { average, countMatching, isAssetLikeDirectoryPath, median, ratio } from "./helpers";
 
 /**
  * Flags directories whose file count is unusually large relative to nearby
