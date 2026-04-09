@@ -36,7 +36,7 @@ async function analyzeWithConfiguredPlugins(rootDir: string) {
   return { loaded, registry, result };
 }
 
-describe("plugin api phase 1", () => {
+describe("plugin api", () => {
   test("loads a local plugin from slop-scan.config.ts and passes rule options", async () => {
     const rootDir = await createTempRepo({
       "src/index.ts": 'export const note = "danger zone";\n',

@@ -23,13 +23,13 @@ export function formatHelp(): string {
     "Development:",
     "  bun run src/cli.ts scan [path] [--json|--lint]",
     "",
-    "Implemented in this phase:",
+    "Implemented today:",
     "  - pluggable registry",
     "  - dependency-aware fact provider scheduler",
     "  - repository discovery",
     "  - text, lint, and JSON reporters",
     "  - module and JSON config loading",
-    "  - phase-1 external rule plugins and plugin presets",
+    "  - external rule plugins and plugin presets",
   ].join("\n");
 }
 
